@@ -1,41 +1,52 @@
-/* ── CSS Custom Properties (95CSS-based) ── */
+/* ── CSS Custom Properties (React95 original theme) ── */
 * {
   margin: 0; padding: 0; box-sizing: border-box;
-  --c-white:    #FFFFFF;
-  --c-black:    #000000;
-  --c-gray-100: #DEDEDE;
-  --c-gray-200: #C3C3C3;
-  --c-gray-300: #808080;
-  --c-blue:     #0F0086;
-  --c-teal:     #008080;
 
-  /* Raised element — windows, panels */
-  --shadow-raised:
-    inset -2px -2px 0 var(--c-black),
-    inset  2px  2px 0 var(--c-gray-100),
-    inset -4px -4px 0 var(--c-gray-300),
-    inset  4px  4px 0 var(--c-white);
+  /* React95 original theme colors */
+  --c-material:         #c6c6c6;  /* window / button background */
+  --c-border-lightest:  #fefefe;  /* inner top-left highlight */
+  --c-border-light:     #dfdfdf;  /* outer top-left highlight */
+  --c-border-dark:      #848584;  /* inner bottom-right shadow */
+  --c-border-darkest:   #0a0a0a;  /* outer bottom-right shadow */
+  --c-teal:             #008080;
+  --c-canvas:           #ffffff;
+  --c-header:           #060084;  /* active title bar */
+  --c-header-inactive:  #7f787f;  /* inactive title bar */
 
-  /* Raised button (default) */
+  /* Aliases for backward compat */
+  --c-white:    var(--c-border-lightest);
+  --c-black:    var(--c-border-darkest);
+  --c-gray-100: var(--c-border-light);
+  --c-gray-200: var(--c-material);
+  --c-gray-300: var(--c-border-dark);
+
+  /* Window border: light top/left, dark bottom/right + inner bevel */
+  --border-window-top:    var(--c-border-light);
+  --border-window-bottom: var(--c-border-darkest);
+  --shadow-window-inner:
+    inset 1px 1px 0px 1px var(--c-border-lightest),
+    inset -1px -1px 0px 1px var(--c-border-dark);
+  --shadow-window-drop: 4px 4px 10px 0 rgba(0, 0, 0, 0.35);
+
+  /* Button border: light top/left, dark bottom/right + inner bevel */
   --shadow-btn:
-    inset -2px -2px 0 var(--c-black),
-    inset  2px  2px 0 var(--c-white),
-    inset -4px -4px 0 var(--c-gray-300),
-    inset  4px  4px 0 var(--c-gray-100);
-
-  /* Pressed / active button */
+    inset 1px 1px 0px 1px var(--c-border-lightest),
+    inset -1px -1px 0px 1px var(--c-border-dark);
   --shadow-btn-active:
-    inset -2px -2px 0 var(--c-white),
-    inset  2px  2px 0 var(--c-black),
-    inset -4px -4px 0 var(--c-gray-100),
-    inset  4px  4px 0 var(--c-gray-300);
+    inset 1px 1px 0px 1px var(--c-border-dark),
+    inset -1px -1px 0px 1px var(--c-border-lightest);
 
-  /* Sunken input */
+  /* Sunken field */
   --shadow-input:
-    inset -2px -2px 0 var(--c-white),
-    inset  2px  2px 0 var(--c-gray-300),
-    inset -4px -4px 0 var(--c-gray-200),
-    inset  4px  4px 0 var(--c-black);
+    inset 1px 1px 0px 1px var(--c-border-darkest),
+    inset -1px -1px 0px 1px var(--c-border-light);
+
+  /* Raised panels (taskbar, start menu, dialogs) */
+  --shadow-raised:
+    inset -2px -2px 0 var(--c-border-darkest),
+    inset  2px  2px 0 var(--c-border-light),
+    inset -4px -4px 0 var(--c-border-dark),
+    inset  4px  4px 0 var(--c-border-lightest);
 }
 
 @font-face {
@@ -230,6 +241,14 @@ body {
   image-rendering: pixelated;
 }
 
+/* Systray speaker icon */
+#systray-speaker {
+  height: 20px;
+  width: auto;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
 /* System tray */
 #systray {
   height: 32px;
@@ -328,15 +347,20 @@ body {
    ════════════════════════════════ */
 .window {
   position: absolute;
-  background-color: var(--c-gray-200);
-  box-shadow: var(--shadow-raised);
+  background-color: var(--c-material);
+  border: 2px solid;
+  border-top-color: var(--c-border-light);
+  border-left-color: var(--c-border-light);
+  border-bottom-color: var(--c-border-darkest);
+  border-right-color: var(--c-border-darkest);
+  box-shadow: var(--shadow-window-inner), var(--shadow-window-drop);
   min-width: 220px;
   min-height: 160px;
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  padding: 8px;
-  gap: 8px;
+  padding: 4px;
+  gap: 4px;
 }
 .window.maximized {
   top: 0 !important;
@@ -347,16 +371,20 @@ body {
 
 /* Title bar */
 .window-titlebar {
-  background: var(--c-gray-300);
+  background: var(--c-header-inactive);
+  height: 33px;
+  line-height: 33px;
   display: flex;
   align-items: center;
-  padding: 8px 4px 4px 8px;
+  padding-left: 4px;
+  padding-right: 3px;
   cursor: move;
   flex-shrink: 0;
   gap: 4px;
+  border: 2px solid var(--c-material);
 }
 .window.active .window-titlebar {
-  background: #0f0086;
+  background: var(--c-header);
 }
 .window-title-icon {
   width: 20px;
@@ -384,11 +412,15 @@ body {
   align-items: center;
 }
 .win-btn {
-  width: 28px;
-  height: 24px;
-  background-color: var(--c-gray-200);
+  width: 27px;
+  height: 27px;
+  background-color: var(--c-material);
+  border: 2px solid;
+  border-top-color: var(--c-border-lightest);
+  border-left-color: var(--c-border-lightest);
+  border-bottom-color: var(--c-border-darkest);
+  border-right-color: var(--c-border-darkest);
   box-shadow: var(--shadow-btn);
-  border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -403,12 +435,16 @@ body {
   overflow: visible;
 }
 .win-btn:active {
+  border-top-color: var(--c-border-darkest);
+  border-left-color: var(--c-border-darkest);
+  border-bottom-color: var(--c-border-lightest);
+  border-right-color: var(--c-border-lightest);
   box-shadow: var(--shadow-btn-active);
 }
 .win-btn:active svg {
   transform: translate(1px, 1px);
 }
-.win-btn-close { width: 28px; }
+.win-btn-close { width: 27px; }
 
 /* Menubar */
 .window-menubar {
@@ -501,7 +537,12 @@ body {
 .window-content {
   flex: 1;
   overflow: auto;
-  background-color: #fff;
+  background-color: var(--c-canvas);
+  border: 2px solid;
+  border-top-color: var(--c-border-dark);
+  border-left-color: var(--c-border-dark);
+  border-bottom-color: var(--c-border-lightest);
+  border-right-color: var(--c-border-lightest);
   box-shadow: var(--shadow-input);
 }
 
@@ -569,9 +610,11 @@ body {
   background: var(--c-gray-200);
 }
 .status-item {
-  box-shadow:
-    inset 1px 1px 0 var(--c-gray-300),
-    inset -1px -1px 0 var(--c-white);
+  border: 2px solid;
+  border-top-color: var(--c-border-dark);
+  border-left-color: var(--c-border-dark);
+  border-bottom-color: var(--c-border-lightest);
+  border-right-color: var(--c-border-lightest);
   padding: 2px 6px;
   flex: 1;
 }
@@ -579,23 +622,22 @@ body {
 /* Resize grip */
 .resize-handle {
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 20px;
-  height: 20px;
-  cursor: se-resize;
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent 0px,
-    transparent 3px,
-    var(--c-white) 3px,
-    var(--c-white) 4px,
-    var(--c-gray-300) 4px,
-    var(--c-gray-300) 5px,
-    transparent 5px,
-    transparent 8px
+  right: 6px;
+  bottom: 6px;
+  width: 25px;
+  height: 25px;
+  cursor: nwse-resize;
+  background-image: linear-gradient(
+    135deg,
+    var(--c-border-lightest) 16.67%,
+    var(--c-material)        16.67%, var(--c-material)        33.33%,
+    var(--c-border-dark)     33.33%, var(--c-border-dark)     50%,
+    var(--c-border-lightest) 50%,    var(--c-border-lightest) 66.67%,
+    var(--c-material)        66.67%, var(--c-material)        83.33%,
+    var(--c-border-dark)     83.33%, var(--c-border-dark)     100%
   );
-  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  background-size: 8.49px 8.49px;
+  clip-path: polygon(100% 0px, 0px 100%, 100% 100%);
 }
 
 /* ════════════════════════════════
