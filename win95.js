@@ -73,9 +73,17 @@ const ICONS = {
 
   drive: `img/hard-drive.png`,
 
+  floppy: `img/floppy.png`,
+
+  cdrom: `img/cdrom.png`,
+
+  controlPanel: `img/control-panel.png`,
+
   recycle: `img/recycle-bin.png`,
 
   notepad: `img/notepad.png`,
+
+  welcome: `img/welcome.png`,
 
   about: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='4' width='28' height='24' fill='%23c0c0c0'/%3E%3Crect x='2' y='4' width='28' height='1' fill='%23fff'/%3E%3Crect x='2' y='4' width='1' height='24' fill='%23fff'/%3E%3Crect x='29' y='4' width='1' height='24' fill='%23808080'/%3E%3Crect x='2' y='27' width='28' height='1' fill='%23808080'/%3E%3Crect x='3' y='5' width='26' height='10' fill='%23000080'/%3E%3Ctext x='16' y='14' text-anchor='middle' fill='%23fff' font-size='8' font-family='Arial' font-weight='bold'%3EWin95%3C/text%3E%3Crect x='6' y='18' width='6' height='6' fill='%23ff3333'/%3E%3Crect x='13' y='18' width='6' height='6' fill='%2333cc33'/%3E%3Crect x='6' y='22' width='6' height='6' fill='%233399ff'/%3E%3Crect x='13' y='22' width='6' height='6' fill='%23ffcc00'/%3E%3C/svg%3E`,
   shutdown: `img/shutdown.ico`,
@@ -118,7 +126,7 @@ const WINDOW_DEFS = {
   welcome: {
     title: 'Welcome',
     width: 480, height: 380,
-    icon: 'about',
+    icon: 'welcome',
     noIcon: true,
     noResize: true,
     build: buildWelcomeWindow,
@@ -142,6 +150,12 @@ const WINDOW_DEFS = {
     width: 520, height: 420,
     icon: 'notepad',
     build: buildBioWindow,
+  },
+  controlpanel: {
+    title: 'Control Panel',
+    width: 500, height: 360,
+    icon: 'controlPanel',
+    build: buildControlPanelWindow,
   },
 };
 
@@ -210,7 +224,6 @@ function buildFilesWindow(container) {
   const files = [
     { name: 'Documents', icon: ICONS.files },
     { name: 'Photos',    icon: ICONS.files },
-    { name: 'Music',     icon: ICONS.files },
     { name: 'readme.txt',        icon: ICONS.notepad },
     { name: 'notes.txt',         icon: ICONS.notepad },
     { name: 'report.txt',        icon: ICONS.notepad },
@@ -242,12 +255,11 @@ function buildFilesWindow(container) {
 
 function buildComputerWindow(container) {
   const drives = [
-    { name: 'Floppy (A:)',      icon: ICONS.drive },
-    { name: 'Floppy (B:)',      icon: ICONS.drive },
+    { name: 'Floppy (A:)',      icon: ICONS.floppy },
     { name: 'Local Disk (C:)',  icon: ICONS.drive },
+    { name: 'CD-ROM (D:)',      icon: ICONS.cdrom },
     { name: 'My Files',         icon: ICONS.files },
-    { name: 'Control Panel',    icon: ICONS.about },
-    { name: 'Printers',         icon: ICONS.about },
+    { name: 'Control Panel',    icon: ICONS.controlPanel },
   ];
 
   container.innerHTML = `
@@ -260,7 +272,7 @@ function buildComputerWindow(container) {
     <div class="window-content">
       <div class="file-grid">
         ${drives.map(d => `
-          <div class="file-item" onclick="selectFile(this)" ondblclick="${d.name === 'My Files' ? "openWindow('files')" : ''}">
+          <div class="file-item" onclick="selectFile(this)" ondblclick="${d.name === 'My Files' ? "openWindow('files')" : d.name === 'Control Panel' ? "openWindow('controlpanel')" : ''}">
             <img src="${d.icon}" alt="">
             <span class="file-label">${d.name}</span>
           </div>
@@ -273,42 +285,57 @@ function buildComputerWindow(container) {
   `;
 }
 
-function buildRecycleWindow(container) {
+function buildControlPanelWindow(container) {
+  const items = [
+    { name: 'Display',        icon: 'img/my-computer.png' },
+    { name: 'Fonts',          icon: 'img/notepad.png' },
+    { name: 'Internet',       icon: 'img/internet-explorer.png' },
+    { name: 'Mouse',          icon: 'img/my-computer.png' },
+    { name: 'Sounds',         icon: 'img/speaker.png' },
+  ];
   container.innerHTML = `
     <div class="window-menubar">
-      <span class="menu-item">File</span>
-      <span class="menu-item">Edit</span>
-      <span class="menu-item">View</span>
-      <span class="menu-item">Help</span>
+      <span class="menu-item"><u>F</u>ile</span>
+      <span class="menu-item"><u>E</u>dit</span>
+      <span class="menu-item"><u>V</u>iew</span>
+      <span class="menu-item"><u>H</u>elp</span>
     </div>
     <div class="window-content">
-      <div class="recycle-empty">
-        <svg width="72" height="72" viewBox="0 0 32 32">
-          <rect x="12" y="2" width="8" height="2" fill="#6868c8"/>
-          <rect x="12" y="2" width="8" height="1" fill="#a8a8f8"/>
-          <rect x="4" y="4" width="24" height="3" fill="#7878d8"/>
-          <rect x="4" y="4" width="24" height="1" fill="#b8b8ff"/>
-          <rect x="4" y="4" width="1" height="3" fill="#b8b8ff"/>
-          <rect x="27" y="4" width="1" height="3" fill="#3030a0"/>
-          <rect x="4" y="6" width="24" height="1" fill="#3030a0"/>
-          <rect x="6" y="7" width="20" height="21" fill="#4848b8"/>
-          <rect x="6" y="7" width="20" height="1" fill="#9898e8"/>
-          <rect x="6" y="7" width="1" height="21" fill="#9898e8"/>
-          <rect x="25" y="7" width="1" height="21" fill="#2020a0"/>
-          <rect x="6" y="27" width="20" height="1" fill="#2020a0"/>
-          <polygon points="16,11 19,15 17.5,15 17.5,18 14.5,18 14.5,15 13,15" fill="white"/>
-          <g transform="translate(16,17) rotate(120) translate(-16,-17)">
-            <polygon points="16,11 19,15 17.5,15 17.5,18 14.5,18 14.5,15 13,15" fill="white"/>
-          </g>
-          <g transform="translate(16,17) rotate(240) translate(-16,-17)">
-            <polygon points="16,11 19,15 17.5,15 17.5,18 14.5,18 14.5,15 13,15" fill="white"/>
-          </g>
-        </svg>
-        <span>The Recycle Bin is empty.</span>
+      <div class="file-grid">
+        ${items.map(d => `
+          <div class="file-item" onclick="selectFile(this)">
+            <img src="${d.icon}" alt="">
+            <span class="file-label">${d.name}</span>
+          </div>
+        `).join('')}
       </div>
     </div>
     <div class="status-bar">
+      <span class="status-item">${items.length} object(s)</span>
+    </div>
+  `;
+}
+
+function buildRecycleWindow(container) {
+  container.innerHTML = `
+    <div class="window-menubar">
+      <span class="menu-item"><u>F</u>ile</span>
+      <span class="menu-item"><u>E</u>dit</span>
+      <span class="menu-item"><u>V</u>iew</span>
+      <span class="menu-item"><u>H</u>elp</span>
+    </div>
+    <div style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;">
+      <!-- Column headers -->
+      <div style="display:flex;flex-shrink:0;background:var(--c-material);">
+        <div style="flex:1;padding:2px 6px;font-size:11px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;border:2px solid;border-top-color:var(--c-border-lightest);border-left-color:var(--c-border-lightest);border-bottom-color:var(--c-border-dark);border-right-color:var(--c-border-dark);cursor:default;">Name</div>
+        <div style="flex:1;padding:2px 6px;font-size:11px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;border:2px solid;border-top-color:var(--c-border-lightest);border-left-color:var(--c-border-lightest);border-bottom-color:var(--c-border-dark);border-right-color:var(--c-border-dark);cursor:default;">Original Location</div>
+      </div>
+      <!-- Empty content area -->
+      <div class="window-content" style="flex:1;overflow:auto;background:#fff;"></div>
+    </div>
+    <div class="status-bar">
       <span class="status-item">0 object(s)</span>
+      <span class="status-item">0 bytes</span>
     </div>
   `;
 }
