@@ -213,21 +213,22 @@ body {
 .taskbar-btn {
   height: 28px;
   padding: 0 6px;
+  width: 160px;
+  min-width: 0;
   background-color: var(--c-gray-200);
   box-shadow: var(--shadow-btn);
   border: none;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 18px;
+  font-weight: normal;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
   display: flex;
   align-items: center;
   gap: 4px;
-  max-width: 150px;
-  min-width: 80px;
+  max-width: 160px;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1;
   text-align: left;
 }
 .taskbar-btn.active {
@@ -239,6 +240,12 @@ body {
   height: 16px;
   flex-shrink: 0;
   image-rendering: pixelated;
+}
+.taskbar-btn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 /* Systray speaker icon */
@@ -337,6 +344,7 @@ body {
   background-color: #000080;
   color: #fff;
 }
+.start-menu-item:hover > span[style] { color: #fff !important; }
 .start-menu-item img {
   width: 24px;
   height: 24px;
@@ -350,6 +358,44 @@ body {
   margin: 3px 6px;
   border-bottom: 1px solid var(--c-white);
 }
+
+/* Programs submenu */
+.has-submenu { position: relative; }
+.start-submenu {
+  display: none;
+  position: absolute;
+  left: calc(100% - 5px);
+  top: 0;
+  width: 200px;
+  background-color: var(--c-material);
+  box-shadow: var(--shadow-raised), 2px 2px 4px rgba(0,0,0,0.4);
+  z-index: 20001;
+  padding: 2px 0;
+  color: #000;
+}
+.has-submenu:hover > .start-submenu { display: block; }
+.start-submenu-item {
+  padding: 3px 8px 3px 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #000;
+  font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
+}
+.start-submenu-item:hover {
+  background-color: #000080;
+  color: #fff;
+}
+.start-submenu-item:hover > span[style] { color: #fff !important; }
+.start-submenu-item img {
+  width: 17px;
+  height: 17px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+.start-submenu-item .item-text { flex: 1; }
 
 /* ════════════════════════════════
    WINDOWS
@@ -900,6 +946,172 @@ body {
   flex: 1;
   overflow: auto;
   background: #fff;
+}
+
+/* ════════════════════════════════
+   MS PAINT
+   ════════════════════════════════ */
+.paint-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+.paint-toolbox {
+  width: 54px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  gap: 5px;
+  background: var(--c-material);
+  border-right: 2px solid var(--c-border-dark);
+}
+.paint-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+}
+.paint-tool {
+  width: 24px;
+  height: 24px;
+  background: var(--c-material);
+  border: 2px solid;
+  border-top-color: var(--c-border-lightest);
+  border-left-color: var(--c-border-lightest);
+  border-bottom-color: var(--c-border-dark);
+  border-right-color: var(--c-border-dark);
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.paint-tool svg { width: 14px; height: 14px; }
+.paint-tool.active,
+.paint-tool:active {
+  border-top-color: var(--c-border-dark);
+  border-left-color: var(--c-border-dark);
+  border-bottom-color: var(--c-border-lightest);
+  border-right-color: var(--c-border-lightest);
+}
+.paint-tool-options {
+  border: 2px solid;
+  border-top-color: var(--c-border-dark);
+  border-left-color: var(--c-border-dark);
+  border-bottom-color: var(--c-border-lightest);
+  border-right-color: var(--c-border-lightest);
+  padding: 4px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.paint-line-opt {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 2px 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.paint-line-opt.active {
+  border-color: var(--c-border-dark);
+  background: #000080;
+}
+.paint-line-opt.active .paint-line-preview { background: #fff; }
+.paint-line-preview {
+  width: 100%;
+  background: #000;
+  display: block;
+}
+.paint-canvas-wrap {
+  flex: 1;
+  overflow: auto;
+  background: #808080;
+  padding: 10px;
+  min-width: 0;
+}
+.paint-canvas-inner {
+  position: relative;
+  display: inline-block;
+}
+.paint-canvas {
+  display: block;
+  border: 1px solid #808080;
+  cursor: crosshair;
+  box-shadow: 2px 2px 0 #404040;
+}
+.paint-canvas-handle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #000;
+  border: 1px solid #fff;
+}
+.paint-handle-r  { right: -4px; top: 50%; transform: translateY(-50%); cursor: e-resize; }
+.paint-handle-b  { bottom: -4px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+.paint-handle-br { bottom: -4px; right: -4px; cursor: se-resize; }
+.paint-palette {
+  display: flex;
+  align-items: center;
+  padding: 3px 4px;
+  gap: 6px;
+  border-top: 2px solid var(--c-border-dark);
+  background: var(--c-material);
+  flex-shrink: 0;
+  height: 38px;
+}
+.paint-fg-bg {
+  position: relative;
+  width: 36px;
+  height: 30px;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+.paint-color-box {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 2px solid;
+}
+.paint-fg-color {
+  top: 0; left: 0;
+  background: #000;
+  border-top-color: var(--c-border-lightest);
+  border-left-color: var(--c-border-lightest);
+  border-bottom-color: var(--c-border-dark);
+  border-right-color: var(--c-border-dark);
+  z-index: 2;
+}
+.paint-bg-color {
+  bottom: 0; right: 0;
+  background: #fff;
+  border-top-color: var(--c-border-dark);
+  border-left-color: var(--c-border-dark);
+  border-bottom-color: var(--c-border-lightest);
+  border-right-color: var(--c-border-lightest);
+  z-index: 1;
+}
+.paint-color-grid {
+  display: grid;
+  grid-template-rows: 14px 14px;
+  grid-auto-columns: 14px;
+  grid-auto-flow: column;
+  gap: 1px;
+}
+.paint-color-swatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--c-border-dark);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.paint-color-swatch:hover {
+  outline: 1px solid #fff;
+  z-index: 1;
+  position: relative;
 }
 
 /* ════════════════════════════════

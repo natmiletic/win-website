@@ -13,7 +13,7 @@
   <meta name="twitter:title" content="Nat Miletic's Windows 95 Portfolio Website">
   <meta name="twitter:description" content="Step back into 1995 — an interactive portfolio built as a fully functional Windows 95 desktop simulation.">
   <meta name="twitter:image" content="img/social-preview.jpg">
-  <link rel="stylesheet" href="style.css?v=7e790a8">
+  <link rel="stylesheet" href="style.css?v=fde4f42">
 
 </head>
 <body>
@@ -99,6 +99,55 @@
   </div>
   <div class="start-menu-items">
 
+    <div class="start-menu-item has-submenu">
+      <img src="img/programs.png" alt="">
+      <span class="item-text">Programs</span>
+      <span style="margin-left:auto;font-size:10px;color:#000;line-height:1;">&#9658;</span>
+      <div class="start-submenu">
+        <div class="start-submenu-item has-submenu">
+          <img src="img/programs.png" alt="">
+          <span class="item-text">Accessories</span>
+          <span style="margin-left:auto;font-size:8px;color:#000;line-height:1;">&#9658;</span>
+          <div class="start-submenu">
+            <div class="start-submenu-item has-submenu">
+              <img src="img/programs.png" alt="">
+              <span class="item-text">Games</span>
+              <span style="margin-left:auto;font-size:8px;color:#000;line-height:1;">&#9658;</span>
+              <div class="start-submenu">
+                <div class="start-submenu-item">
+                  <img src="img/minesweeper.png" alt="">
+                  <span class="item-text">Minesweeper</span>
+                </div>
+              </div>
+            </div>
+            <div class="start-submenu-item has-submenu">
+              <img src="img/programs.png" alt="">
+              <span class="item-text">System Tools</span>
+              <span style="margin-left:auto;font-size:8px;color:#000;line-height:1;">&#9658;</span>
+              <div class="start-submenu">
+                <div class="start-submenu-item">
+                  <img src="img/defrag.png" alt="">
+                  <span class="item-text">Disk Defragmenter</span>
+                </div>
+              </div>
+            </div>
+            <div class="start-submenu-item" onclick="openWindow('paint');closeStartMenu()">
+              <img src="img/paint.png" alt="">
+              <span class="item-text">Paint</span>
+            </div>
+            <div class="start-submenu-item" onclick="openWindow('notepad');closeStartMenu()">
+              <img src="img/notepad2.png" alt="">
+              <span class="item-text">Notepad</span>
+            </div>
+          </div>
+        </div>
+        <div class="start-submenu-item" onclick="openWindow('ie');closeStartMenu()">
+          <img src="img/internet-explorer.png" alt="">
+          <span class="item-text">Internet Explorer</span>
+        </div>
+      </div>
+    </div>
+
     <div class="start-menu-item" onclick="openWindow('computer');closeStartMenu()">
       <img src="img/my-computer.png" alt="">
       <span class="item-text">My Computer</span>
@@ -110,7 +159,7 @@
     </div>
 
     <div class="start-menu-item" onclick="openWindow('notepad');closeStartMenu()">
-      <img src="img/notepad.png" alt="">
+      <img src="img/notepad2.png" alt="">
       <span class="item-text">Notepad</span>
     </div>
 
@@ -137,11 +186,9 @@
   <div class="context-item grayed">Line Up Icons</div>
   <div class="context-sep"></div>
   <div class="context-item" onclick="hideContextMenu()">Refresh</div>
-  <div class="context-sep"></div>
-  <div class="context-item" onclick="openWindow('about');hideContextMenu()">Properties</div>
 </div>
 
 
-<script src="win95.js?v=7e790a8"></script>
+<script src="win95.js?v=fde4f42"></script>
 </body>
 </html>
