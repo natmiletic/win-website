@@ -243,10 +243,10 @@ body {
 
 /* Systray speaker icon */
 #systray-speaker {
+  width: 20px;
   height: 20px;
-  width: auto;
-  image-rendering: pixelated;
   flex-shrink: 0;
+  image-rendering: pixelated;
 }
 
 /* System tray */
@@ -261,7 +261,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 11px;
+  font-size: 15px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
   white-space: nowrap;
   flex-shrink: 0;
@@ -283,22 +283,31 @@ body {
 #start-menu.visible { display: flex; }
 
 .start-menu-sidebar {
-  width: 30px;
-  background: linear-gradient(to top, #000080 0%, #1084d0 100%);
+  width: 32px;
+  background: #84888e;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 6px;
+  padding-bottom: 10px;
   flex-shrink: 0;
 }
-.start-menu-sidebar span {
-  color: rgba(255,255,255,0.55);
-  font-size: 15px;
-  font-weight: bold;
-  font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
+.start-menu-sidebar > span {
+  color: #d0d0d0;
+  font-size: 18px;
+  font-style: italic;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  letter-spacing: 4px;
+  letter-spacing: 3px;
+  user-select: none;
+}
+.start-menu-sidebar strong {
+  font-weight: bold;
+  color: #ffffff;
+}
+.sidebar-95 {
+  font-weight: 300;
+  color: #b0b0c8;
 }
 
 /* Start menu sprite icons (from win95-icons-sprite.png) */
@@ -701,7 +710,7 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
-  height: 20px;
+  height: 22px;
   margin: -4px -4px 8px -4px;
 }
 .dialog-body {
@@ -742,10 +751,8 @@ body {
   flex-direction: column;
   gap: 5px;
   margin-top: 8px;
-  box-shadow: var(--shadow-input);
-  border: none;
-  padding: 8px 10px;
-  background: #fff;
+  padding: 0;
+  background: transparent;
 }
 .dialog-option {
   display: flex;

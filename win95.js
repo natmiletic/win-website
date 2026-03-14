@@ -64,6 +64,7 @@ const ICONS = {
   notepad: `img/notepad.png`,
 
   about: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='4' width='28' height='24' fill='%23c0c0c0'/%3E%3Crect x='2' y='4' width='28' height='1' fill='%23fff'/%3E%3Crect x='2' y='4' width='1' height='24' fill='%23fff'/%3E%3Crect x='29' y='4' width='1' height='24' fill='%23808080'/%3E%3Crect x='2' y='27' width='28' height='1' fill='%23808080'/%3E%3Crect x='3' y='5' width='26' height='10' fill='%23000080'/%3E%3Ctext x='16' y='14' text-anchor='middle' fill='%23fff' font-size='8' font-family='Arial' font-weight='bold'%3EWin95%3C/text%3E%3Crect x='6' y='18' width='6' height='6' fill='%23ff3333'/%3E%3Crect x='13' y='18' width='6' height='6' fill='%2333cc33'/%3E%3Crect x='6' y='22' width='6' height='6' fill='%233399ff'/%3E%3Crect x='13' y='22' width='6' height='6' fill='%23ffcc00'/%3E%3C/svg%3E`,
+  shutdown: `img/shutdown.ico`,
 };
 
 // ════════════════════════════════
@@ -100,11 +101,31 @@ const WINDOW_DEFS = {
     icon: 'about',
     build: buildAboutWindow,
   },
+  welcome: {
+    title: 'Welcome',
+    width: 500, height: 340,
+    icon: 'about',
+    build: buildWelcomeWindow,
+  },
+  shutdown: {
+    title: 'Shut Down Windows',
+    width: 374, height: 240,
+    icon: 'shutdown',
+    noIcon: true,
+    noResize: true,
+    build: buildShutdownWindow,
+  },
   notepad: {
     title: 'Notepad - Untitled',
     width: 430, height: 320,
     icon: 'notepad',
     build: buildNotepadWindow,
+  },
+  bio: {
+    title: 'Notepad - Nat Miletic Bio',
+    width: 520, height: 420,
+    icon: 'notepad',
+    build: buildBioWindow,
   },
 };
 
@@ -138,7 +159,7 @@ function openWindow(type) {
 
   win.innerHTML = `
     <div class="window-titlebar" id="titlebar-${type}">
-      <img class="window-title-icon" src="${ICONS[def.icon] || ''}" alt="">
+      ${def.noIcon ? '' : `<img class="window-title-icon" src="${ICONS[def.icon] || ''}" alt="">`}
       <span class="window-title">${def.title}</span>
       <div class="window-controls">
         <button class="win-btn" title="Minimize" onclick="minimizeWindow('${type}')">
@@ -153,7 +174,7 @@ function openWindow(type) {
       </div>
     </div>
     <div class="window-body" id="wbody-${type}"></div>
-    <div class="resize-handle" id="resize-${type}"></div>
+    ${def.noResize ? '' : `<div class="resize-handle" id="resize-${type}"></div>`}
   `;
 
   desktop.appendChild(win);
@@ -162,7 +183,7 @@ function openWindow(type) {
   def.build(document.getElementById('wbody-' + type), type);
   focusWindow(type);
   makeDraggable(win, document.getElementById('titlebar-' + type), type);
-  makeResizable(win, document.getElementById('resize-' + type), type);
+  if (!def.noResize) makeResizable(win, document.getElementById('resize-' + type), type);
   addTaskbarBtn(type, def.title, def.icon);
 }
 
@@ -174,9 +195,10 @@ function buildFilesWindow(container) {
     { name: 'Documents', icon: ICONS.files },
     { name: 'Photos',    icon: ICONS.files },
     { name: 'Music',     icon: ICONS.files },
-    { name: 'readme.txt',  icon: ICONS.notepad },
-    { name: 'notes.txt',   icon: ICONS.notepad },
-    { name: 'report.txt',  icon: ICONS.notepad },
+    { name: 'readme.txt',        icon: ICONS.notepad },
+    { name: 'notes.txt',         icon: ICONS.notepad },
+    { name: 'report.txt',        icon: ICONS.notepad },
+    { name: 'Nat Miletic Bio', icon: ICONS.notepad },
   ];
 
   container.innerHTML = `
@@ -344,6 +366,135 @@ function buildAboutWindow(container) {
   `;
 }
 
+const TIPS = [
+  "You can use Windows Explorer to see all the files on your computer.",
+  "You can use the Start button to find files on your computer.",
+  "To find a file, click the Start button, point to Find, and then click Files or Folders.",
+  "To adjust the volume, double-click the speaker icon in the taskbar.",
+  "You can drag icons on the desktop to arrange them however you like.",
+  "Right-click the desktop to change your display settings.",
+];
+let tipIndex = 0;
+
+function buildWelcomeWindow(container) {
+  function renderTip() {
+    const el = container.querySelector('#welcome-tip-text');
+    if (el) el.textContent = TIPS[tipIndex];
+  }
+
+  container.innerHTML = `
+    <div style="display:flex;flex-direction:column;height:100%;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;">
+
+      <!-- Header -->
+      <div style="background:#fff;padding:12px 16px 10px;border-bottom:1px solid var(--c-border-dark);display:flex;align-items:baseline;gap:0;">
+        <span style="font-size:24px;font-weight:normal;color:#000;">Welcome to </span>
+        <span style="font-size:24px;font-weight:bold;color:#000;">Windows</span>
+        <span style="font-size:24px;font-weight:bold;color:#c00000;">95</span>
+      </div>
+
+      <!-- Body -->
+      <div style="display:flex;flex:1;padding:10px;gap:8px;background:var(--c-material);overflow:hidden;">
+
+        <!-- Left: Did you know panel -->
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px;min-width:0;">
+          <div style="background:#fff;padding:6px 8px;border:2px solid;border-top-color:var(--c-border-dark);border-left-color:var(--c-border-dark);border-bottom-color:var(--c-border-lightest);border-right-color:var(--c-border-lightest);box-shadow:var(--shadow-input);display:flex;align-items:center;gap:8px;">
+            <svg width="28" height="28" viewBox="0 0 32 32" style="flex-shrink:0;" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="13" r="9" fill="#ffdd00" stroke="#000" stroke-width="1"/>
+              <rect x="13" y="22" width="6" height="2" fill="#ffdd00" stroke="#000" stroke-width="0.5"/>
+              <rect x="13" y="24" width="6" height="2" fill="#ffdd00" stroke="#000" stroke-width="0.5"/>
+              <rect x="14" y="9" width="4" height="7" fill="#000" rx="1"/>
+              <circle cx="16" cy="18" r="1.5" fill="#000"/>
+            </svg>
+            <span style="font-size:12px;font-weight:bold;">Did you know...</span>
+          </div>
+          <div style="flex:1;background:repeating-linear-gradient(to bottom,#ffffc0 0px,#ffffc0 18px,#ffff80 18px,#ffff80 19px);border:2px solid;border-top-color:var(--c-border-dark);border-left-color:var(--c-border-dark);border-bottom-color:var(--c-border-lightest);border-right-color:var(--c-border-lightest);box-shadow:var(--shadow-input);padding:8px 10px;font-size:12px;line-height:19px;overflow:hidden;">
+            <span id="welcome-tip-text">${TIPS[tipIndex]}</span>
+          </div>
+        </div>
+
+        <!-- Right: Buttons -->
+        <div style="display:flex;flex-direction:column;gap:4px;width:140px;flex-shrink:0;">
+          <button class="dialog-btn" style="width:100%;height:28px;text-align:left;padding:0 8px;"><u>W</u>indows Tour</button>
+          <button class="dialog-btn" style="width:100%;height:28px;text-align:left;padding:0 8px;">What's <u>N</u>ew</button>
+          <button class="dialog-btn" style="width:100%;height:28px;text-align:left;padding:0 8px;"><u>O</u>nline Registration</button>
+          <button class="dialog-btn" style="width:100%;height:28px;text-align:left;padding:0 8px;"><u>P</u>roduct Catalog</button>
+          <button class="dialog-btn" style="width:100%;height:28px;text-align:left;padding:0 8px;" onclick="tipIndex=(tipIndex+1)%TIPS.length;(function(){var el=document.querySelector('#welcome-tip-text');if(el)el.textContent=TIPS[tipIndex];})()">Next <u>T</u>ip</button>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--c-material);border-top:1px solid var(--c-border-dark);">
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;cursor:pointer;">
+          <input type="checkbox" checked style="cursor:pointer;accent-color:#000080;">
+          Show this Welcome Screen next time you start Windows
+        </label>
+        <button class="dialog-btn" style="min-width:70px;" onclick="closeWindow('welcome')">Close</button>
+      </div>
+
+    </div>
+  `;
+  container.style.cssText = 'display:flex;flex-direction:column;overflow:hidden;';
+}
+
+function buildShutdownWindow(container) {
+  container.innerHTML = `
+    <div style="display:flex;flex:1;gap:14px;padding:14px 16px 0;align-items:flex-start;">
+      <img src="img/shutdown.ico" style="width:41px;height:41px;image-rendering:pixelated;flex-shrink:0;margin-top:2px;">
+      <div style="flex:1;">
+        <p style="margin-bottom:10px;font-size:12px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;">Are you sure you want to:</p>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;cursor:pointer;">
+            <input type="radio" name="shutdown-opt" value="shutdown" checked style="cursor:pointer;accent-color:#000080;flex-shrink:0;">
+            <span><u>S</u>hut down the computer?</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;cursor:pointer;">
+            <input type="radio" name="shutdown-opt" value="restart" style="cursor:pointer;accent-color:#000080;flex-shrink:0;">
+            <span><u>R</u>estart the computer?</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;cursor:pointer;">
+            <input type="radio" name="shutdown-opt" value="msdos" style="cursor:pointer;accent-color:#000080;flex-shrink:0;">
+            <span>Restart the computer in <u>M</u>S-DOS mode?</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;cursor:pointer;">
+            <input type="radio" name="shutdown-opt" value="logoff" style="cursor:pointer;accent-color:#000080;flex-shrink:0;">
+            <span><u>C</u>lose all programs and log on as a different user?</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:8px;padding:4px 14px 12px;">
+      <button class="dialog-btn" onclick="doShutdownAction()"><u>Y</u>es</button>
+      <button class="dialog-btn" onclick="closeWindow('shutdown')"><u>N</u>o</button>
+      <button class="dialog-btn" onclick="closeWindow('shutdown')"><u>H</u>elp</button>
+
+    </div>
+  `;
+  container.style.cssText = 'display:flex;flex-direction:column;';
+}
+
+function buildBioWindow(container) {
+  const s = 'font-family:"Courier New",Courier,monospace;font-size:15px;line-height:1.6;color:#000;';
+  const a = 'color:#000080;text-decoration:underline;cursor:pointer;';
+  container.innerHTML = `
+    <div class="window-menubar">
+      <span class="menu-item"><u>F</u>ile</span>
+      <span class="menu-item"><u>E</u>dit</span>
+      <span class="menu-item"><u>S</u>earch</span>
+      <span class="menu-item"><u>H</u>elp</span>
+    </div>
+    <div class="window-content" style="padding:8px;overflow:auto;">
+      <div style="${s}">
+        <p style="margin-bottom:12px;">Nat Miletic is the founder of <a href="https://cliowebsites.com" target="_blank" style="${a}">Clio Websites</a>, a Calgary web design company. With a BCIS and an MBA under his belt, Nat's all about helping businesses thrive online with his sharp eye for detail and relentless passion for making things better.</p>
+        <p style="margin-bottom:12px;">From crafting sleek WordPress websites to boosting SEO and ensuring everything works smoothly across devices, Nat's helped businesses big and small grow their online presence. Whether it's global brands like <a href="https://www.myfitnesspal.com" target="_blank" style="${a}">MyFitnessPal</a> or local favorites like Galvanic, his work has made websites not only look great but also perform better in search results.</p>
+        <p style="margin-bottom:12px;">Nat's been in the web development and marketing game since the early 2000s, and he loves sharing his insights with thousands of followers on social media.</p>
+        <p style="margin-bottom:12px;">Oh, and did we mention? He's also the author of Client Bytes – Dev Agency and Freelancer Sales and has created several WordPress and SEO courses available on Gumroad and Udemy. He also co-hosts a podcast called The Agency Hustle with Kyle Prinsloo.</p>
+      </div>
+    </div>
+  `;
+  container.style.cssText = 'display:flex;flex-direction:column;';
+}
+
 function buildNotepadWindow(container) {
   container.innerHTML = `
     <div class="window-menubar">
@@ -431,6 +582,10 @@ function closeWindow(type) {
   if (tb) tb.remove();
   delete openWindows[type];
   activeWindow = null;
+  if (type === 'shutdown') {
+    const backdrop = document.getElementById('shutdown-backdrop');
+    if (backdrop) backdrop.remove();
+  }
 }
 
 // ════════════════════════════════
@@ -572,6 +727,7 @@ function selectFile(el) {
 }
 
 function openFileItem(name) {
+  if (name === 'Nat Miletic Bio') { openWindow('bio'); return; }
   if (name.endsWith('.txt')) openWindow('notepad');
 }
 
@@ -579,18 +735,37 @@ function openFileItem(name) {
 //  SHUTDOWN / DIALOG
 // ════════════════════════════════
 function showShutdown() {
-  const radio = document.querySelector('input[name="shutdown-opt"][value="shutdown"]');
-  if (radio) radio.checked = true;
-  document.getElementById('dialog-overlay').classList.add('visible');
+  let backdrop = document.getElementById('shutdown-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'shutdown-backdrop';
+    backdrop.style.cssText = 'position:fixed;inset:0 0 40px 0;background:rgba(0,0,0,0.25);z-index:999;pointer-events:none;';
+    document.body.appendChild(backdrop);
+  }
+  openWindow('shutdown');
 }
 function hideDialog() {
-  document.getElementById('dialog-overlay').classList.remove('visible');
+  closeWindow('shutdown');
+  const backdrop = document.getElementById('shutdown-backdrop');
+  if (backdrop) backdrop.remove();
 }
 function doShutdownAction() {
   const opt = (document.querySelector('input[name="shutdown-opt"]:checked') || {}).value || 'shutdown';
-  hideDialog();
+  closeWindow('shutdown');
+  const backdrop = document.getElementById('shutdown-backdrop');
+  if (backdrop) backdrop.remove();
   if (opt === 'restart') {
     reboot();
+  } else if (opt === 'logoff') {
+    document.body.innerHTML = `
+      <div style="background:#008080;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;">
+        <p style="color:#fff;font-family:'MS Sans Serif',Arial,sans-serif;font-size:16px;text-align:center;">
+          Please wait while Windows logs you off...
+        </p>
+        <button onclick="location.reload()" style="padding:6px 24px;font-size:12px;cursor:pointer;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;box-shadow:0 0 0 1px #000;font-family:'MS Sans Serif',Arial,sans-serif;">
+          Log on again
+        </button>
+      </div>`;
   } else if (opt === 'msdos') {
     document.body.innerHTML = `
       <div style="background:#000;width:100vw;height:100vh;padding:16px;font-family:'Courier New',monospace;color:#aaa;font-size:14px;">
