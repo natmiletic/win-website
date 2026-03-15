@@ -226,6 +226,7 @@
   cursor: pointer;
   font-size: 13px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
+  color: #000000;
 }
 .dialog-btn:active {
   box-shadow: var(--shadow-btn-active);

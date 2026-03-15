@@ -43,9 +43,13 @@
 }
 
 /* ── iOS WebKit text color fix ── */
-/* Prevents iOS Safari from overriding color with its default blue on interactive elements */
+/* iOS Safari sets its own blue color on button/input elements via UA stylesheet.
+   Explicitly reset color on all form elements so currentColor resolves correctly. */
 * {
   -webkit-text-fill-color: currentColor;
+}
+button, input, select, textarea {
+  color: #000000;
 }
 
 /* ── Base ── */
