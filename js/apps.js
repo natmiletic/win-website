@@ -1074,13 +1074,7 @@ function buildDefragWindow(container, type) {
   const CW = BW + GAP, CH = BH + GAP; // cell stride: 10w × 8h
   const ROWS_MAX = 150;               // total rows for ~15 min run
 
-  const USED = 0, SYS = 1, FRAG = 2, FREE = 3, HEAD = 4;
-  const PAL = [
-    ['#00A8A8', '#50DDDD', '#006868'], // USED  – cyan
-    ['#0000A8', '#2828C8', '#000060'], // SYS   – navy
-    ['#A80000', '#DD5050', '#580000'], // FRAG  – red
-    ['#C0C0C0', '#FFFFFF', '#808080'], // FREE  – silver
-  ];
+  const USED = 0, SYS = 1, FRAG = 2, FREE = 3, HEAD = 4, DEFRAG = 5;
 
   const cvId   = `dfcv-${type}`;
   const vpId   = `dfvp-${type}`;
@@ -1141,11 +1135,10 @@ function buildDefragWindow(container, type) {
     for (let r = 0; r < ROWS_MAX; r++) {
       for (let c = 0; c < cols; c++) {
         const i = r * cols + c, rnd = Math.random();
-        if      (r < 2)                  grid[i] = SYS;
-        else if (r === 2)                grid[i] = rnd < 0.65 ? SYS  : (rnd < 0.82 ? USED : FRAG);
-        else if (r >= 6  && r <= 9)      grid[i] = rnd < 0.55 ? FRAG : (rnd < 0.72 ? FREE : USED);
-        else if (r >= 10 && r <= 12)     grid[i] = rnd < 0.35 ? FRAG : (rnd < 0.48 ? FREE : USED);
-        else                             grid[i] = rnd < 0.04 ? FRAG : (rnd < 0.07 ? FREE : USED);
+        if (r < 2) grid[i] = SYS;
+        else if (rnd < 0.07) grid[i] = FREE;
+        else if (rnd < 0.13) grid[i] = FRAG;
+        else grid[i] = USED;
       }
     }
   }
@@ -1154,8 +1147,38 @@ function buildDefragWindow(container, type) {
     const r = (i / COLS) | 0, c = i % COLS;
     const x = c * CW, y = r * CH;
     const t = grid[i];
-    if (t === HEAD) { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, y, BW, BH); return; }
-    const [fill, hi, sh] = PAL[t];
+    if (t === FREE) {
+      ctx.fillStyle = '#EEEEEE';
+      ctx.fillRect(x, y, BW, BH);
+      return;
+    }
+    if (t === FRAG) {
+      // White base with red top-right quarter
+      ctx.fillStyle = '#F0F0F0';
+      ctx.fillRect(x, y, BW, BH);
+      ctx.fillStyle = '#CC2020';
+      ctx.fillRect(x + ((BW + 1) >> 1), y, BW >> 1, (BH + 1) >> 1);
+      return;
+    }
+    if (t === HEAD) {
+      ctx.fillStyle = '#FF2020';
+      ctx.fillRect(x, y, BW, BH);
+      return;
+    }
+    if (t === DEFRAG) {
+      // Dark blue with black checkerboard dots (like taskbar active tiles)
+      ctx.fillStyle = '#000088';
+      ctx.fillRect(x, y, BW, BH);
+      ctx.fillStyle = '#000000';
+      for (let dy = 0; dy < BH; dy++)
+        for (let dx = dy & 1; dx < BW; dx += 2)
+          ctx.fillRect(x + dx, y + dy, 1, 1);
+      return;
+    }
+    // USED or SYS — bevelled block
+    const [fill, hi, sh] = t === SYS
+      ? ['#0000A8', '#2828C8', '#000060']
+      : ['#00BBBB', '#40EEEE', '#007070'];
     ctx.fillStyle = fill; ctx.fillRect(x + 1, y + 1, BW - 1, BH - 1);
     ctx.fillStyle = hi;   ctx.fillRect(x, y, BW - 1, 1); ctx.fillRect(x, y + 1, 1, BH - 1);
     ctx.fillStyle = sh;   ctx.fillRect(x + 1, y + BH - 1, BW - 1, 1); ctx.fillRect(x + BW - 1, y + 1, 1, BH - 1);
@@ -1250,13 +1273,13 @@ function buildDefragWindow(container, type) {
       return;
     }
 
-    // Clear previous head position
+    // Clear previous head — block becomes defragmented (dark blue with dots)
     if (headPos > 0 && grid[headPos - 1] === HEAD) {
-      grid[headPos - 1] = USED;
+      grid[headPos - 1] = DEFRAG;
       drawBlock(headPos - 1);
     }
-    // Paint current head
-    if (grid[headPos] !== SYS) {
+    // Paint current head — skip SYS and FREE blocks
+    if (grid[headPos] !== SYS && grid[headPos] !== FREE) {
       grid[headPos] = HEAD;
       drawBlock(headPos);
     }
