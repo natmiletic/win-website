@@ -38,5 +38,9 @@ const ICONS = {
   paint: `img/paint.png`,
 
   imageFile: `img/image-file.png`,
+
+  minesweeper: `img/minesweeper.png`,
+
+  briefcase: `img/briefcase.png`,
 };
 

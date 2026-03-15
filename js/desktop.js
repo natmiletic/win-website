@@ -87,3 +87,47 @@ function openImageInPaint(src, filename) {
     img.src = src;
   }, 50);
 }
+
+// ════════════════════════════════
+//  RECYCLE BIN DRAG & DROP
+// ════════════════════════════════
+let recycleBinItems = [];
+
+function iconDragStart(e, id, name, src) {
+  e.dataTransfer.setData('iconId', id);
+  e.dataTransfer.setData('iconName', name);
+  e.dataTransfer.setData('iconSrc', src);
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function recycleDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.getElementById('icon-recycle').classList.add('selected');
+}
+
+function recycleDragLeave(e) {
+  document.getElementById('icon-recycle').classList.remove('selected');
+}
+
+function recycleDrop(e) {
+  e.preventDefault();
+  const id   = e.dataTransfer.getData('iconId');
+  const name = e.dataTransfer.getData('iconName');
+  const src  = e.dataTransfer.getData('iconSrc');
+  if (!id || !name) return;
+
+  const iconEl = document.getElementById(id);
+  if (iconEl) iconEl.style.display = 'none';
+
+  recycleBinItems.push({ id, name, src });
+
+  const recycleImg = document.querySelector('#icon-recycle img');
+  if (recycleImg) recycleImg.src = 'img/recycle-bin-full.png';
+
+  document.getElementById('icon-recycle').classList.remove('selected');
+
+  // Refresh window if open
+  const body = document.getElementById('wbody-recycle');
+  if (body) buildRecycleWindow(body);
+}

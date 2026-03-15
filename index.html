@@ -50,6 +50,8 @@
 
   <!-- My Files icon -->
   <div class="desktop-icon" id="icon-files" style="top:110px;left:14px;"
+       draggable="true"
+       ondragstart="iconDragStart(event,'icon-files','My Files','img/folder.png')"
        onclick="selectIcon(event,'icon-files')" ondblclick="openWindow('files')">
     <img src="img/folder.png" alt="My Files">
     <span class="icon-label">My Files</span>
@@ -57,13 +59,26 @@
 
   <!-- Internet Explorer icon -->
   <div class="desktop-icon" id="icon-ie" style="top:204px;left:14px;"
+       draggable="true"
+       ondragstart="iconDragStart(event,'icon-ie','Internet Explorer','img/internet-explorer.png')"
        onclick="selectIcon(event,'icon-ie')" ondblclick="openWindow('ie')">
     <img src="img/internet-explorer.png" alt="Internet Explorer">
     <span class="icon-label">Internet Explorer</span>
   </div>
 
+  <!-- My Briefcase icon -->
+  <div class="desktop-icon" id="icon-briefcase" style="top:298px;left:14px;"
+       draggable="true"
+       ondragstart="iconDragStart(event,'icon-briefcase','My Briefcase','img/briefcase.png')"
+       onclick="selectIcon(event,'icon-briefcase')" ondblclick="openWindow('briefcase')">
+    <img src="img/briefcase.png" alt="My Briefcase">
+    <span class="icon-label">My Briefcase</span>
+  </div>
+
   <!-- Nat Miletic Bio icon -->
   <div class="desktop-icon" id="icon-bio" style="top:392px;left:14px;"
+       draggable="true"
+       ondragstart="iconDragStart(event,'icon-bio','Nat Miletic Bio','img/notepad.png')"
        onclick="selectIcon(event,'icon-bio')" ondblclick="openWindow('bio')">
     <img src="img/notepad.png" alt="Nat Miletic Bio">
     <span class="icon-label">Nat Miletic Bio</span>
@@ -71,14 +86,17 @@
 
   <!-- LinkedIn icon -->
   <div class="desktop-icon" id="icon-linkedin" style="top:486px;left:14px;"
+       draggable="true"
+       ondragstart="iconDragStart(event,'icon-linkedin','LinkedIn','img/linkedin.png')"
        onclick="selectIcon(event,'icon-linkedin')" ondblclick="window.open('https://linkedin.com/in/natmiletic','_blank')">
     <img src="img/linkedin.png" alt="LinkedIn">
     <span class="icon-label">LinkedIn</span>
   </div>
 
   <!-- Recycle Bin icon -->
-  <div class="desktop-icon" id="icon-recycle" style="top:298px;left:14px;"
-       onclick="selectIcon(event,'icon-recycle')" ondblclick="openWindow('recycle')">
+  <div class="desktop-icon" id="icon-recycle" style="top:580px;left:14px;"
+       onclick="selectIcon(event,'icon-recycle')" ondblclick="openWindow('recycle')"
+       ondragover="recycleDragOver(event)" ondragleave="recycleDragLeave(event)" ondrop="recycleDrop(event)">
     <img src="img/recycle-bin.png" alt="Recycle Bin">
     <span class="icon-label">Recycle Bin</span>
   </div>
@@ -127,7 +145,7 @@
               <span class="item-text">Games</span>
               <span style="margin-left:auto;font-size:8px;color:#000;line-height:1;">&#9658;</span>
               <div class="start-submenu">
-                <div class="start-submenu-item">
+                <div class="start-submenu-item" onclick="openWindow('minesweeper');closeStartMenu()">
                   <img src="img/minesweeper.png" alt="">
                   <span class="item-text">Minesweeper</span>
                 </div>
@@ -218,5 +236,12 @@
   <script src="js/dialog.js"></script>
   <script src="js/boot.js"></script>
   <script src="js/init.js"></script>
+  <script src="js/screensaver.js"></script>
+
+  <!-- Screensaver overlay -->
+  <div id="screensaver" style="display:none;position:fixed;inset:0;z-index:99999;background:#000;cursor:none;">
+    <video id="screensaver-video" src="videos/screensaver-pipes.mp4" loop muted playsinline
+           style="width:100%;height:100%;object-fit:cover;"></video>
+  </div>
 </body>
 </html>

@@ -22,6 +22,11 @@
   color: #fff;
   outline: 1px dotted #fff;
 }
+#icon-recycle.selected .icon-label {
+  background-color: #000080;
+  color: #fff;
+  outline: 1px dotted #fff;
+}
 .desktop-icon img {
   width: 32px;
   height: 32px;
