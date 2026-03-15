@@ -100,3 +100,16 @@ function doShutdownAction() {
       </div>`;
   }
 }
+
+function doRun() {
+  const input = document.getElementById('run-input');
+  if (!input) return;
+  const val = input.value.trim().toLowerCase();
+  if (!val) return;
+
+  if (val === 'notepad') openWindow('notepad');
+  else if (['ms paint', 'paint'].includes(val)) openWindow('paint');
+  else if (['ie', 'internet', 'internet explorer'].includes(val)) openWindow('ie');
+
+  closeWindow('run');
+}

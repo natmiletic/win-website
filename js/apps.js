@@ -762,22 +762,27 @@ function buildNotepadWindow(container) {
 
 function buildRunWindow(container) {
   const f = "font-size:12px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;";
-  const inputStyle = `
-    flex:1;height:22px;${f}
-    padding:0 3px;
+  const comboStyle = `
+    flex:1;display:flex;align-items:center;
     border:2px solid;
     border-top-color:var(--c-border-dark);border-left-color:var(--c-border-dark);
     border-bottom-color:var(--c-border-lightest);border-right-color:var(--c-border-lightest);
     box-shadow:inset 1px 1px 0 var(--c-border-darkest);
-    background:#fff;outline:none;
+    background:#fff;
+  `;
+  const inputStyle = `
+    flex:1;height:18px;${f}
+    padding:0 3px;border:none;background:transparent;outline:none;
   `;
   const dropBtnStyle = `
-    width:22px;height:22px;flex-shrink:0;
-    background:var(--c-material);cursor:pointer;border:2px solid;
+    width:16px;height:16px;flex-shrink:0;margin:1px 1px 1px 0;
+    background:var(--c-material);cursor:pointer;
+    border:2px solid;
     border-top-color:var(--c-border-lightest);border-left-color:var(--c-border-lightest);
     border-bottom-color:var(--c-border-darkest);border-right-color:var(--c-border-darkest);
     box-shadow:var(--shadow-btn);
-    display:flex;align-items:center;justify-content:center;${f}
+    display:flex;align-items:center;justify-content:center;
+    font-size:7px;color:#000;padding:0;
   `;
   container.innerHTML = `
     <div style="display:flex;gap:12px;padding:14px 14px 10px;align-items:flex-start;">
@@ -786,13 +791,13 @@ function buildRunWindow(container) {
     </div>
     <div style="display:flex;align-items:center;gap:8px;padding:0 14px 12px;">
       <label style="${f}white-space:nowrap;">Open:</label>
-      <div style="display:flex;flex:1;">
-        <input type="text" style="${inputStyle}">
+      <div style="${comboStyle}">
+        <input type="text" id="run-input" style="${inputStyle}" onkeydown="if(event.key==='Enter')doRun()">
         <button style="${dropBtnStyle}">&#9660;</button>
       </div>
     </div>
-    <div style="display:flex;justify-content:flex-end;gap:6px;padding:0 14px 14px;">
-      <button class="dialog-btn"><u>O</u>K</button>
+    <div style="display:flex;justify-content:flex-end;gap:6px;padding:5px 14px 24px;">
+      <button class="dialog-btn" onclick="doRun()"><u>O</u>K</button>
       <button class="dialog-btn" onclick="closeWindow('run')"><u>C</u>ancel</button>
       <button class="dialog-btn"><u>B</u>rowse...</button>
     </div>
@@ -882,9 +887,10 @@ const WINDOW_DEFS = {
   },
   run: {
     title: 'Run',
-    width: 360, height: 170,
+    width: 360, height: 185,
     icon: 'run',
     noResize: true,
     build: buildRunWindow,
+    getPos: (dw, dh, w, h) => ({ x: 10, y: dh - h - 10 }),
   },
 };

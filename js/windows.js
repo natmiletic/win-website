@@ -18,8 +18,11 @@ function openWindow(type) {
 
   const w = Math.min(def.width, dw - 40);
   const h = Math.min(def.height, dh - 40);
-  const x = Math.max(20, Math.min(dw - w - 20, (dw - w) / 2 + count * 22));
-  const y = Math.max(20, Math.min(dh - h - 20, (dh - h) / 2 + count * 22));
+  const defaultX = Math.max(20, Math.min(dw - w - 20, (dw - w) / 2 + count * 22));
+  const defaultY = Math.max(20, Math.min(dh - h - 20, (dh - h) / 2 + count * 22));
+  const pos = def.getPos ? def.getPos(dw, dh, w, h) : { x: defaultX, y: defaultY };
+  const x = pos.x;
+  const y = pos.y;
 
   const win = document.createElement('div');
   win.className = 'window active';
