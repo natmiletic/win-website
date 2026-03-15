@@ -270,6 +270,8 @@ function buildRecycleWindow(container) {
 
 function buildIEWindow(container) {
   const HOME = 'https://cliowebsites.com';
+  ieHistory = [HOME];
+  ieHistoryIndex = 0;
 
   const LINKS = [
     { label: 'Clio Websites', url: 'https://cliowebsites.com' },
@@ -286,55 +288,29 @@ function buildIEWindow(container) {
     </div>
 
     <div class="ie-toolbar">
-      <div class="ie-btn-group">
-        <button class="ie-nav-btn" id="ie-back" title="Back" onclick="ieNav('back')">
-          <svg viewBox="0 0 26 22" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2,11 L11,3 L11,7 L20,7 L20,15 L11,15 L11,19 Z" fill="#303080" stroke="#000" stroke-width="0.5" stroke-linejoin="round"/>
-          </svg>
-          <span>Back</span>
-        </button>
-        <button class="ie-drop-btn" title="Back menu">&#9660;</button>
-      </div>
-      <div class="ie-btn-group">
-        <button class="ie-nav-btn ie-nav-dim" id="ie-forward" title="Forward" onclick="ieNav('forward')">
-          <svg viewBox="0 0 26 22" xmlns="http://www.w3.org/2000/svg">
-            <path d="M24,11 L15,3 L15,7 L6,7 L6,15 L15,15 L15,19 Z" fill="#606060" stroke="#808080" stroke-width="0.5" stroke-linejoin="round"/>
-          </svg>
-          <span>Forward</span>
-        </button>
-        <button class="ie-drop-btn ie-nav-dim" title="Forward menu">&#9660;</button>
-      </div>
+      <button class="ie-nav-btn" id="ie-back" title="Back" onclick="ieNav('back')" style="opacity:0.4;pointer-events:none;">
+        <img src="img/ie-back-disabled.png" style="width:22px;height:22px;image-rendering:pixelated;">
+        <span>Back</span>
+      </button>
+      <button class="ie-nav-btn" id="ie-forward" title="Forward" onclick="ieNav('forward')" style="opacity:0.4;pointer-events:none;">
+        <img src="img/ie-forward-disabled.png" style="width:22px;height:22px;image-rendering:pixelated;">
+        <span>Forward</span>
+      </button>
       <div class="ie-toolbar-divider"></div>
       <button class="ie-nav-btn" id="ie-stop" title="Stop" onclick="ieNav('stop')">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" fill="#cc2200" stroke="#880000" stroke-width="1"/>
-          <line x1="7.5" y1="7.5" x2="16.5" y2="16.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="16.5" y1="7.5" x2="7.5" y2="16.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
+        <img src="img/ie-stop-icon.png" style="width:42px;height:22px;image-rendering:pixelated;">
         <span>Stop</span>
       </button>
       <button class="ie-nav-btn" id="ie-refresh" title="Refresh" onclick="ieNav('refresh')">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12,3 A9,9,0,0,1,21,12" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M12,21 A9,9,0,0,1,3,12" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-          <polygon points="12,1 16,6 8,6" fill="#000"/>
-          <polygon points="12,23 8,18 16,18" fill="#000"/>
-        </svg>
+        <img src="img/ie-refresh-icon.png" style="width:42px;height:22px;image-rendering:pixelated;">
         <span>Refresh</span>
       </button>
       <button class="ie-nav-btn" id="ie-home" title="Home" onclick="ieNav('home')">
-        <svg viewBox="0 0 26 24" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="13,2 1,12 4,12 4,22 10,22 10,16 16,16 16,22 22,22 22,12 25,12" fill="#404040" stroke="#000" stroke-width="0.5" stroke-linejoin="round"/>
-          <rect x="10" y="16" width="6" height="6" fill="#808080"/>
-        </svg>
+        <img src="img/ie-home-icon.png" style="width:42px;height:22px;image-rendering:pixelated;">
         <span>Home</span>
       </button>
       <button class="ie-nav-btn" id="ie-search" title="Search" onclick="ieLoad('https://google.com')">
-        <svg viewBox="0 0 26 24" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="10" cy="10" r="8" fill="none" stroke="#000" stroke-width="2.5"/>
-          <line x1="16" y1="16" x2="25" y2="24" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="10" cy="10" r="5" fill="none" stroke="#808080" stroke-width="1"/>
-        </svg>
+        <img src="img/ie-search-icon.png" style="width:42px;height:22px;image-rendering:pixelated;">
         <span>Search</span>
       </button>
       <div class="ie-toolbar-sep"></div>
@@ -347,7 +323,6 @@ function buildIEWindow(container) {
       <span class="ie-address-label">Address</span>
       <input class="ie-address-input" id="ie-address" type="text" value="${HOME}"
         onkeydown="if(event.key==='Enter')ieGo()">
-      <button class="ie-go-btn" onclick="ieGo()">Go</button>
     </div>
 
     <div class="ie-linksbar">
@@ -369,20 +344,47 @@ function buildIEWindow(container) {
   `;
 
   container.style.cssText = 'display:flex;flex-direction:column;overflow:hidden;';
+  setTimeout(() => ieUpdateNavBtns(), 0);
+}
+
+let ieHistory = [];
+let ieHistoryIndex = -1;
+
+function ieUpdateNavBtns() {
+  const backBtn = document.getElementById('ie-back');
+  const fwdBtn  = document.getElementById('ie-forward');
+  const canBack = ieHistoryIndex > 0;
+  const canFwd  = ieHistoryIndex < ieHistory.length - 1;
+  console.log('[IE nav]', { ieHistoryIndex, histLen: ieHistory.length, canBack, canFwd });
+  if (backBtn) {
+    const img = backBtn.querySelector('img');
+    backBtn.style.opacity = canBack ? '1' : '0.4';
+    backBtn.style.pointerEvents = canBack ? '' : 'none';
+    if (img) img.src = canBack ? 'img/ie-back.png' : 'img/ie-back-disabled.png';
+  }
+  if (fwdBtn) {
+    const img = fwdBtn.querySelector('img');
+    fwdBtn.style.opacity = canFwd ? '1' : '0.4';
+    fwdBtn.style.pointerEvents = canFwd ? '' : 'none';
+    if (img) img.src = canFwd ? 'img/ie-forward.png' : 'img/ie-forward-disabled.png';
+  }
 }
 
 function ieNav(action) {
   const frame = document.getElementById('ie-frame');
-  const addr  = document.getElementById('ie-address');
   if (!frame) return;
-  if (action === 'back')    { try { frame.contentWindow.history.back();    } catch(e){} }
-  if (action === 'forward') { try { frame.contentWindow.history.forward(); } catch(e){} }
+  if (action === 'back') {
+    if (ieHistoryIndex > 0) { ieHistoryIndex--; ieLoad(ieHistory[ieHistoryIndex], true); }
+  }
+  if (action === 'forward') {
+    if (ieHistoryIndex < ieHistory.length - 1) { ieHistoryIndex++; ieLoad(ieHistory[ieHistoryIndex], true); }
+  }
   if (action === 'stop')    { frame.src = frame.src; }
   if (action === 'refresh') { try { frame.contentWindow.location.reload(); } catch(e){ frame.src = frame.src; } }
   if (action === 'home')    { ieLoad('https://cliowebsites.com'); }
 }
 
-function ieLoad(url) {
+function ieLoad(url, isBack) {
   if (!url) return;
   if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
   const frame   = document.getElementById('ie-frame');
@@ -391,8 +393,30 @@ function ieLoad(url) {
   const status  = document.getElementById('ie-status');
   if (addr)    addr.value = url;
   if (blocked) { blocked.style.display = 'none'; blocked.textContent = ''; }
-  if (frame)   { frame.style.display = 'block'; frame.src = url; }
+  if (frame)   { frame.style.display = 'none'; frame.src = 'about:blank'; }
   if (status)  status.textContent = 'Connecting to ' + url + '...';
+
+  if (!isBack) {
+    ieHistory = ieHistory.slice(0, ieHistoryIndex + 1);
+    ieHistory.push(url);
+    ieHistoryIndex = ieHistory.length - 1;
+  }
+  ieUpdateNavBtns();
+
+  let hostname = url;
+  try { hostname = new URL(url).hostname; } catch(e) {}
+
+  fetch(url, { mode: 'no-cors', signal: AbortSignal.timeout(8000) })
+    .then(() => {
+      if (frame) { frame.style.display = 'block'; frame.src = url; }
+    })
+    .catch(err => {
+      const msg = err.name === 'TimeoutError'
+        ? hostname + ' timed out.'
+        : (err.message || 'The page could not be loaded.');
+      if (blocked) { blocked.textContent = 'Error: ' + msg; blocked.style.display = 'block'; }
+      if (status)  status.textContent = 'Cannot connect to ' + hostname;
+    });
 }
 
 function ieGo() {
@@ -405,15 +429,28 @@ function ieFrameLoaded(frame) {
   const blocked = document.getElementById('ie-blocked');
   if (status) status.textContent = 'Done';
   if (!frame.src || frame.src === 'about:blank') return;
+  let hostname = frame.src;
+  try { hostname = new URL(frame.src).hostname; } catch(e) {}
+
+  let isError = false;
+
+  // Check 1: contentDocument accessible = browser error page (real cross-origin pages throw)
   try {
-    // Cross-origin pages that loaded OK throw here — browser error pages don't
     const body = frame.contentDocument && frame.contentDocument.body;
-    if (body) {
-      if (blocked) { blocked.textContent = 'Error: This page cannot be displayed.'; blocked.style.display = 'block'; }
-      frame.style.display = 'none';
-    }
-  } catch(e) {
-    // Cross-origin exception means the page loaded successfully
+    if (body) isError = true;
+  } catch(e) { /* cross-origin success */ }
+
+  // Check 2: contentWindow.location.href — chrome-error:// pages don't throw and expose a non-http URL
+  if (!isError) {
+    try {
+      const href = frame.contentWindow.location.href;
+      if (href && !/^https?:\/\//i.test(href)) isError = true;
+    } catch(e) { /* cross-origin success */ }
+  }
+
+  if (isError) {
+    if (blocked) { blocked.textContent = 'Error: ' + hostname + ' refused to connect.'; blocked.style.display = 'block'; }
+    frame.style.display = 'none';
   }
 }
 
@@ -550,7 +587,7 @@ function buildBioWindow(container) {
       <span class="menu-item"><u>H</u>elp</span>
     </div>
     <div class="notepad-edit-row">
-      <div class="notepad-ta" style="overflow:hidden;display:block;white-space:normal;cursor:default;">
+      <div class="notepad-ta" style="overflow:hidden;display:block;white-space:normal;">
         <div style="${s}">
           <p style="margin-bottom:12px;">Nat Miletic is the founder of <a href="https://cliowebsites.com" target="_blank" style="${a}">Clio Websites</a> and co-founder of <a href="https://websitesusa.com" target="_blank" style="${a}">Websites USA</a>. With a BCIS and an MBA under his belt, Nat's all about helping businesses thrive online with his sharp eye for detail and relentless passion for making things better.</p>
           <p style="margin-bottom:12px;">From crafting sleek WordPress websites to boosting SEO and ensuring everything works smoothly across devices, Nat's helped businesses big and small grow their online presence. Whether it's global brands like MyFitnessPal or local favorites like Galvanic, his work has made websites not only look great but also perform better in search results.</p>
@@ -564,45 +601,27 @@ function buildBioWindow(container) {
           <div class="notepad-vthumb"></div>
         </div>
         <button class="notepad-scroll-btn notepad-scroll-down"></button>
+        <div style="width:16px;height:16px;flex-shrink:0;background:#c0c0c0;"></div>
       </div>
-    </div>
-    <div class="status-bar">
-      <div class="notepad-hscroll">
-        <button class="notepad-scroll-btn notepad-scroll-left"></button>
-        <div class="notepad-htrack">
-          <div class="notepad-hthumb"></div>
-        </div>
-        <button class="notepad-scroll-btn notepad-scroll-right"></button>
-      </div>
-      <div class="status-resize-slot"></div>
     </div>
   `;
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
 
   const ta     = container.querySelector('.notepad-ta');
-  const htrack = container.querySelector('.notepad-htrack');
-  const hthumb = container.querySelector('.notepad-hthumb');
-  const hleft  = container.querySelector('.notepad-scroll-left');
-  const hright = container.querySelector('.notepad-scroll-right');
   const vtrack = container.querySelector('.notepad-vtrack');
   const vthumb = container.querySelector('.notepad-vthumb');
   const vup    = container.querySelector('.notepad-scroll-up');
   const vdown  = container.querySelector('.notepad-scroll-down');
 
-  function updateHScroll() {
-    const scrollable = ta.scrollWidth - ta.clientWidth;
-    if (scrollable <= 0) { hthumb.style.width = '0'; return; }
-    const trackW = htrack.clientWidth;
-    const thumbW = Math.max(20, (ta.clientWidth / ta.scrollWidth) * trackW);
-    const thumbL = (ta.scrollLeft / scrollable) * (trackW - thumbW);
-    hthumb.style.width = thumbW + 'px';
-    hthumb.style.left  = thumbL + 'px';
-  }
-
   function updateVScroll() {
     const scrollable = ta.scrollHeight - ta.clientHeight;
-    if (scrollable <= 0) { vthumb.style.height = '0'; return; }
+    const disabled = scrollable <= 0;
+    vup.classList.toggle('scroll-disabled', disabled);
+    vdown.classList.toggle('scroll-disabled', disabled);
+    vtrack.classList.toggle('scroll-disabled', disabled);
+    if (disabled) { vthumb.style.display = 'none'; return; }
+    vthumb.style.display = '';
     const trackH = vtrack.clientHeight;
     const thumbH = Math.max(20, (ta.clientHeight / ta.scrollHeight) * trackH);
     const thumbT = (ta.scrollTop / scrollable) * (trackH - thumbH);
@@ -610,17 +629,10 @@ function buildBioWindow(container) {
     vthumb.style.top    = thumbT + 'px';
   }
 
-  ta.addEventListener('scroll', () => { updateHScroll(); updateVScroll(); });
+  ta.addEventListener('scroll', () => { updateVScroll(); });
 
-  hleft.addEventListener('click',  () => { ta.scrollLeft -= 20; updateHScroll(); });
-  hright.addEventListener('click', () => { ta.scrollLeft += 20; updateHScroll(); });
-  vup.addEventListener('click',    () => { ta.scrollTop  -= 20; updateVScroll(); });
-  vdown.addEventListener('click',  () => { ta.scrollTop  += 20; updateVScroll(); });
-
-  let hDrag = false, hDragX = 0, hScrollL = 0;
-  hthumb.addEventListener('mousedown', e => {
-    hDrag = true; hDragX = e.clientX; hScrollL = ta.scrollLeft; e.preventDefault();
-  });
+  vup.addEventListener('click',  () => { ta.scrollTop -= 20; updateVScroll(); });
+  vdown.addEventListener('click', () => { ta.scrollTop += 20; updateVScroll(); });
 
   let vDrag = false, vDragY = 0, vScrollT = 0;
   vthumb.addEventListener('mousedown', e => {
@@ -628,18 +640,13 @@ function buildBioWindow(container) {
   });
 
   document.addEventListener('mousemove', e => {
-    if (hDrag) {
-      const scrollable = ta.scrollWidth - ta.clientWidth;
-      ta.scrollLeft = hScrollL + (e.clientX - hDragX) * (scrollable / (htrack.clientWidth - hthumb.offsetWidth));
-      updateHScroll();
-    }
     if (vDrag) {
       const scrollable = ta.scrollHeight - ta.clientHeight;
       ta.scrollTop = vScrollT + (e.clientY - vDragY) * (scrollable / (vtrack.clientHeight - vthumb.offsetHeight));
       updateVScroll();
     }
   });
-  document.addEventListener('mouseup', () => { hDrag = false; vDrag = false; });
+  document.addEventListener('mouseup', () => { vDrag = false; });
 
   ta.addEventListener('wheel', e => {
     e.preventDefault();
@@ -647,7 +654,7 @@ function buildBioWindow(container) {
     updateVScroll();
   }, { passive: false });
 
-  setTimeout(() => { updateHScroll(); updateVScroll(); }, 50);
+  setTimeout(() => { updateVScroll(); }, 50);
 }
 
 function buildNotepadWindow(container) {
@@ -695,7 +702,12 @@ function buildNotepadWindow(container) {
 
   function updateHScroll() {
     const scrollable = ta.scrollWidth - ta.clientWidth;
-    if (scrollable <= 0) { hthumb.style.width = '0'; return; }
+    const disabled = scrollable <= 0;
+    hleft.classList.toggle('scroll-disabled', disabled);
+    hright.classList.toggle('scroll-disabled', disabled);
+    htrack.classList.toggle('scroll-disabled', disabled);
+    if (disabled) { hthumb.style.display = 'none'; return; }
+    hthumb.style.display = '';
     const trackW  = htrack.clientWidth;
     const thumbW  = Math.max(20, (ta.clientWidth / ta.scrollWidth) * trackW);
     const thumbL  = (ta.scrollLeft / scrollable) * (trackW - thumbW);
@@ -705,7 +717,12 @@ function buildNotepadWindow(container) {
 
   function updateVScroll() {
     const scrollable = ta.scrollHeight - ta.clientHeight;
-    if (scrollable <= 0) { vthumb.style.height = '0'; return; }
+    const disabled = scrollable <= 0;
+    vup.classList.toggle('scroll-disabled', disabled);
+    vdown.classList.toggle('scroll-disabled', disabled);
+    vtrack.classList.toggle('scroll-disabled', disabled);
+    if (disabled) { vthumb.style.display = 'none'; return; }
+    vthumb.style.display = '';
     const trackH  = vtrack.clientHeight;
     const thumbH  = Math.max(20, (ta.clientHeight / ta.scrollHeight) * trackH);
     const thumbT  = (ta.scrollTop / scrollable) * (trackH - thumbH);
@@ -760,26 +777,20 @@ function buildNotepadWindow(container) {
 function buildRunWindow(container) {
   const f = "font-size:12px;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;";
   const comboStyle = `
-    flex:1;display:flex;align-items:center;
-    border:2px solid;
-    border-top-color:var(--c-border-dark);border-left-color:var(--c-border-dark);
-    border-bottom-color:var(--c-border-lightest);border-right-color:var(--c-border-lightest);
-    box-shadow:inset 1px 1px 0 var(--c-border-darkest);
-    background:#fff;
+    flex:1;display:flex;flex-direction:row;justify-content:flex-end;align-items:center;
+    padding:2px 2px 2px 5px;height:22px;
+    background:#ffffff;border:none;
+    box-shadow:inset -1px -1px 0px #ffffff, inset 1px 1px 0px #808080, inset -2px -2px 0px #c1c1c1, inset 2px 2px 0px #000000;
   `;
   const inputStyle = `
-    flex:1;height:18px;${f}
-    padding:0 3px;border:none;background:transparent;outline:none;
+    flex:1;height:100%;${f}
+    padding:0;border:none;background:transparent;outline:none;
   `;
   const dropBtnStyle = `
-    width:16px;height:16px;flex-shrink:0;margin:1px 1px 1px 0;
-    background:var(--c-material);cursor:pointer;
-    border:2px solid;
-    border-top-color:var(--c-border-lightest);border-left-color:var(--c-border-lightest);
-    border-bottom-color:var(--c-border-darkest);border-right-color:var(--c-border-darkest);
-    box-shadow:var(--shadow-btn);
-    display:flex;align-items:center;justify-content:center;
-    font-size:7px;color:#000;padding:0;
+    width:16px;align-self:stretch;flex-shrink:0;
+    background:#c0c0c0;cursor:pointer;border:none;
+    box-shadow:inset -1px -1px 0px #000000, inset 1px 1px 0px #c1c1c1, inset -2px -2px 0px #818181, inset 2px 2px 0px #ffffff;
+    display:flex;align-items:center;justify-content:center;padding:0;position:relative;
   `;
   container.innerHTML = `
     <div style="display:flex;gap:12px;padding:14px 14px 10px;align-items:flex-start;">
@@ -790,7 +801,7 @@ function buildRunWindow(container) {
       <label style="${f}white-space:nowrap;">Open:</label>
       <div style="${comboStyle}">
         <input type="text" id="run-input" style="${inputStyle}" onkeydown="if(event.key==='Enter')doRun()">
-        <button style="${dropBtnStyle}">&#9660;</button>
+        <button style="${dropBtnStyle}"><svg width="7" height="4" viewBox="0 0 7 4" style="display:block;"><polygon points="0,0 7,0 3.5,4" fill="#000000"/></svg></button>
       </div>
     </div>
     <div style="display:flex;justify-content:flex-end;gap:6px;padding:5px 14px 24px;">

@@ -61,7 +61,6 @@
   box-shadow: var(--shadow-btn);
   border: none;
   cursor: pointer;
-  font-size: 18px;
   font-weight: normal;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
   display: flex;
@@ -72,10 +71,13 @@
   white-space: nowrap;
   flex-shrink: 1;
   text-align: left;
+  font-size: 13px;
 }
 .taskbar-btn.active {
   box-shadow: var(--shadow-btn-active);
-  background-color: var(--c-gray-100);
+  background-color: var(--c-material);
+  background-image: repeating-conic-gradient(var(--c-material) 0% 25%, #ffffff 0% 50%);
+  background-size: 2px 2px;
 }
 .taskbar-btn img {
   width: 16px;
@@ -178,7 +180,7 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
   position: relative;
 }
@@ -222,7 +224,7 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   color: #000;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
 }

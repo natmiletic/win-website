@@ -4,12 +4,8 @@
 .window {
   position: absolute;
   background-color: var(--c-material);
-  border: 2px solid;
-  border-top-color: var(--c-border-light);
-  border-left-color: var(--c-border-light);
-  border-bottom-color: var(--c-border-darkest);
-  border-right-color: var(--c-border-darkest);
-  box-shadow: var(--shadow-window-inner), var(--shadow-window-drop);
+  border: none;
+  box-shadow: var(--shadow-window-frame), var(--shadow-window-drop);
   min-width: 220px;
   min-height: 160px;
   z-index: 1000;
@@ -68,15 +64,11 @@
   align-items: center;
 }
 .win-btn {
-  width: 27px;
-  height: 27px;
-  background-color: var(--c-material);
-  border: 2px solid;
-  border-top-color: var(--c-border-lightest);
-  border-left-color: var(--c-border-lightest);
-  border-bottom-color: var(--c-border-darkest);
-  border-right-color: var(--c-border-darkest);
-  box-shadow: var(--shadow-btn);
+  width: 22px;
+  height: 22px;
+  background-color: #c0c0c0;
+  border: none;
+  box-shadow: inset -1px -1px 0px #000000, inset 1px 1px 0px #ffffff, inset -2px -2px 0px #818181;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -89,18 +81,26 @@
   height: 14px;
   display: block;
   overflow: visible;
+  flex-shrink: 0;
+}
+.win-btn svg[width][height] {
+  width: revert;
+  height: revert;
 }
 .win-btn:active {
-  border-top-color: var(--c-border-darkest);
-  border-left-color: var(--c-border-darkest);
-  border-bottom-color: var(--c-border-lightest);
-  border-right-color: var(--c-border-lightest);
-  box-shadow: var(--shadow-btn-active);
+  box-shadow: inset 1px 1px 0px #000000, inset -1px -1px 0px #ffffff, inset 2px 2px 0px #818181;
 }
 .win-btn:active svg {
   transform: translate(1px, 1px);
 }
-.win-btn-close { width: 27px; }
+.win-btn-close { width: 22px; }
+.win-btn-minimize {
+  background-image: url('../img/minimize-btn.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: none;
+  background-color: transparent;
+}
 
 /* Menubar */
 .window-menubar {
@@ -195,11 +195,7 @@
   flex: 1;
   overflow: auto;
   background-color: var(--c-canvas);
-  border: 2px solid;
-  border-top-color: var(--c-border-dark);
-  border-left-color: var(--c-border-dark);
-  border-bottom-color: var(--c-border-lightest);
-  border-right-color: var(--c-border-lightest);
+  border: none;
   box-shadow: var(--shadow-input);
 }
 
@@ -217,7 +213,7 @@
   flex-direction: column;
   align-items: center;
   padding: 10px 8px 8px;
-  cursor: default;
+  cursor: url('../img/cursor-default.png') 0 0, default;
   width: 110px;
 }
 .file-item.selected .file-label {
@@ -258,20 +254,13 @@
 /* Resize grip */
 .resize-handle {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
-  width: 25px;
-  height: 25px;
+  right: 2px;
+  bottom: 2px;
+  width: 13px;
+  height: 13px;
   cursor: nwse-resize;
-  background-image: linear-gradient(
-    135deg,
-    var(--c-border-lightest) 16.67%,
-    var(--c-material)        16.67%, var(--c-material)        33.33%,
-    var(--c-border-dark)     33.33%, var(--c-border-dark)     50%,
-    var(--c-border-lightest) 50%,    var(--c-border-lightest) 66.67%,
-    var(--c-material)        66.67%, var(--c-material)        83.33%,
-    var(--c-border-dark)     83.33%, var(--c-border-dark)     100%
-  );
-  background-size: 8.49px 8.49px;
-  clip-path: polygon(100% 0px, 0px 100%, 100% 100%);
+  background-image: url('../img/resize-grip.png');
+  background-size: 13px 13px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
 }

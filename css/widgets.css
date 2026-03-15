@@ -3,33 +3,32 @@
    ════════════════════════════════ */
 .status-bar {
   padding: 0 2px;
-  font-size: 12px;
+  font-size: 11px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
   display: flex;
   align-items: stretch;
   gap: 2px;
   flex-shrink: 0;
-  height: 32px;
+  height: 17px;
   background: var(--c-gray-200);
 }
 .status-resize-slot {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
+  width: 13px;
+  min-width: 13px;
+  height: 13px;
   flex-shrink: 0;
+  align-self: flex-end;
   background: var(--c-gray-200);
 }
 .status-item {
-  border: 2px solid;
-  border-top-color: var(--c-border-dark);
-  border-left-color: var(--c-border-dark);
-  border-bottom-color: var(--c-border-lightest);
-  border-right-color: var(--c-border-lightest);
-  padding: 0 6px;
-  margin: 1px 0;
+  border: none;
+  box-shadow: inset -1px -1px 0px #ffffff, inset 1px 1px 0px #808080;
+  padding: 0 4px;
   flex: 1;
   display: flex;
   align-items: center;
+  background: #c0c0c0;
+  position: relative;
 }
 
 /* ════════════════════════════════
@@ -46,6 +45,7 @@
   overflow: hidden;
   user-select: text;
   -webkit-user-select: text;
+  cursor: url('../img/cursor-default.png') 0 0, default;
   border: 2px solid;
   border-top-color: var(--c-border-dark);
   border-left-color: var(--c-border-dark);
@@ -71,11 +71,11 @@
   overflow: hidden;
 }
 .notepad-scroll-btn {
-  width: 32px;
-  height: 32px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
-  background-color: var(--c-gray-200);
-  box-shadow: var(--shadow-raised);
+  background-color: #c0c0c0;
+  box-shadow: inset -1px -1px 0px #000000, inset 1px 1px 0px #c1c1c1, inset -2px -2px 0px #818181, inset 2px 2px 0px #ffffff;
   border: none;
   cursor: pointer;
   background-repeat: no-repeat;
@@ -91,25 +91,21 @@
 .notepad-htrack {
   flex: 1;
   position: relative;
-  background-color: #fff;
+  background-color: #ffffff;
   background-image:
-    repeating-linear-gradient(45deg,
-      var(--c-gray-100) 25%, transparent 25%, transparent 75%, var(--c-gray-100) 75%, var(--c-gray-100)),
-    repeating-linear-gradient(45deg,
-      var(--c-gray-100) 25%, var(--c-white) 25%, var(--c-white) 75%, var(--c-gray-100) 75%, var(--c-gray-100));
-  background-position: 0 0, 3px 3px;
-  background-size: 6px 6px;
+    repeating-conic-gradient(#c0c0c0 0% 25%, #ffffff 0% 50%);
+  background-size: 2px 2px;
 }
 .notepad-hthumb {
   position: absolute;
   top: 0;
   bottom: 0;
-  background: var(--c-gray-200);
-  box-shadow: var(--shadow-raised);
-  min-width: 20px;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px 0px #000000, inset 1px 1px 0px #c1c1c1, inset -2px -2px 0px #818181, inset 2px 2px 0px #ffffff;
+  min-width: 22px;
 }
 .notepad-vscroll {
-  width: 32px;
+  width: 22px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -117,28 +113,59 @@
 .notepad-vtrack {
   flex: 1;
   position: relative;
-  background-color: #fff;
+  background-color: #ffffff;
   background-image:
-    repeating-linear-gradient(45deg,
-      var(--c-gray-100) 25%, transparent 25%, transparent 75%, var(--c-gray-100) 75%, var(--c-gray-100)),
-    repeating-linear-gradient(45deg,
-      var(--c-gray-100) 25%, var(--c-white) 25%, var(--c-white) 75%, var(--c-gray-100) 75%, var(--c-gray-100));
-  background-position: 0 0, 3px 3px;
-  background-size: 6px 6px;
+    repeating-conic-gradient(#c0c0c0 0% 25%, #ffffff 0% 50%);
+  background-size: 2px 2px;
 }
 .notepad-vthumb {
   position: absolute;
   left: 0;
   right: 0;
-  background: var(--c-gray-200);
-  box-shadow: var(--shadow-raised);
-  min-height: 20px;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px 0px #000000, inset 1px 1px 0px #c1c1c1, inset -2px -2px 0px #818181, inset 2px 2px 0px #ffffff;
+  min-height: 22px;
 }
 .notepad-scroll-up {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M0 9.43h12V7.716H0zm1.714-1.714h8.572V6H8.57V4.287H6.857V2.573H5.143v1.714H3.429v1.714H1.714z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 .notepad-scroll-down {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M12 2.57H0v1.714h12zm-1.714 1.714H1.714V6H3.43v1.714h1.714v1.714h1.714V7.713h1.714V5.999h1.715z' clip-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* Disabled scrollbar state — embossed gray+white arrows, flat track */
+.notepad-scroll-up.scroll-disabled {
+  background-image:
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23808080' fill-rule='evenodd' d='M0 9.43h12V7.716H0zm1.714-1.714h8.572V6H8.57V4.287H6.857V2.573H5.143v1.714H3.429v1.714H1.714z' clip-rule='evenodd'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' fill-rule='evenodd' d='M0 9.43h12V7.716H0zm1.714-1.714h8.572V6H8.57V4.287H6.857V2.573H5.143v1.714H3.429v1.714H1.714z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-position: 50% 50%, calc(50% + 1px) calc(50% + 1px);
+  background-size: 12px, 12px;
+}
+.notepad-scroll-down.scroll-disabled {
+  background-image:
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23808080' fill-rule='evenodd' d='M12 2.57H0v1.714h12zm-1.714 1.714H1.714V6H3.43v1.714h1.714v1.714h1.714V7.713h1.714V5.999h1.715z' clip-rule='evenodd'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' fill-rule='evenodd' d='M12 2.57H0v1.714h12zm-1.714 1.714H1.714V6H3.43v1.714h1.714v1.714h1.714V7.713h1.714V5.999h1.715z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-position: 50% 50%, calc(50% + 1px) calc(50% + 1px);
+  background-size: 12px, 12px;
+}
+.notepad-scroll-left.scroll-disabled {
+  background-image:
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23808080' fill-rule='evenodd' d='M9.429 12.002v-12H7.714v12zm-1.715-1.715V1.716H6V3.43H4.286v1.714H2.57V6.86h1.715v1.714H6v1.714z' clip-rule='evenodd'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' fill-rule='evenodd' d='M9.429 12.002v-12H7.714v12zm-1.715-1.715V1.716H6V3.43H4.286v1.714H2.57V6.86h1.715v1.714H6v1.714z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-position: 50% 50%, calc(50% + 1px) calc(50% + 1px);
+  background-size: 12px, 12px;
+}
+.notepad-scroll-right.scroll-disabled {
+  background-image:
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23808080' fill-rule='evenodd' d='M2.571.001v12h1.715v-12zm1.715 1.715v8.571H6V8.573h1.714V6.859H9.43V5.144H7.714V3.43H6V1.716z' clip-rule='evenodd'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' fill-rule='evenodd' d='M2.571.001v12h1.715v-12zm1.715 1.715v8.571H6V8.573h1.714V6.859H9.43V5.144H7.714V3.43H6V1.716z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-position: 50% 50%, calc(50% + 1px) calc(50% + 1px);
+  background-size: 12px, 12px;
+}
+.notepad-vtrack.scroll-disabled,
+.notepad-htrack.scroll-disabled {
+  background-image: none;
+  background-color: var(--c-gray-200);
 }
 
 /* ════════════════════════════════
@@ -197,7 +224,7 @@
   box-shadow: var(--shadow-btn);
   border: none;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 13px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
 }
 .dialog-btn:active {

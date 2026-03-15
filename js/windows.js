@@ -34,14 +34,12 @@ function openWindow(type) {
       ${def.noIcon ? '' : `<img class="window-title-icon" src="${ICONS[def.icon] || ''}" alt="">`}
       <span class="window-title">${def.title}</span>
       <div class="window-controls">
-        <button class="win-btn" title="Minimize" onclick="minimizeWindow('${type}')">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="9" width="10" height="2" fill="#000"/></svg>
-        </button>
+        <button class="win-btn win-btn-minimize" title="Minimize" onclick="minimizeWindow('${type}')"></button>
         <button class="win-btn" title="Maximize" onclick="toggleMaximize('${type}')">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="10" height="10" fill="none" stroke="#000" stroke-width="1.5"/><rect x="1" y="1" width="10" height="3" fill="#000"/></svg>
+          <img src="img/maximize-icon.png" style="width:14px;height:14px;image-rendering:pixelated;display:block;">
         </button>
         <button class="win-btn win-btn-close" title="Close" onclick="closeWindow('${type}')">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="1" x2="11" y2="11" stroke="#000" stroke-width="2.5"/><line x1="11" y1="1" x2="1" y2="11" stroke="#000" stroke-width="2.5"/></svg>
+          <img src="img/close-icon.png" style="width:14px;height:14px;image-rendering:pixelated;display:block;">
         </button>
       </div>
     </div>

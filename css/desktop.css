@@ -14,7 +14,7 @@
   position: absolute;
   width: 76px;
   text-align: center;
-  cursor: default;
+  cursor: url('../img/cursor-default.png') 0 0, default;
   padding: 4px;
 }
 .desktop-icon.selected .icon-label {
@@ -32,7 +32,7 @@
 }
 .icon-label {
   color: #fff;
-  font-size: 11px;
+  font-size: 13px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
   text-shadow: 1px 0 #000, -1px 0 #000, 0 1px #000, 0 -1px #000;
   display: inline-block;
@@ -61,7 +61,7 @@
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
 }
 .context-item:hover { background-color: #000080; color: #fff; }
-.context-item.grayed { color: var(--c-gray-300); cursor: default; }
+.context-item.grayed { color: var(--c-gray-300); cursor: url('../img/cursor-default.png') 0 0, default; }
 .context-item.grayed:hover { background: none; color: var(--c-gray-300); }
 .context-sep {
   height: 1px;

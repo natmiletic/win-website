@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   height: 18px;
-  cursor: default;
+  cursor: url('../img/cursor-default.png') 0 0, default;
   white-space: nowrap;
   font-size: 11px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
@@ -99,49 +99,35 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 2px 5px;
-  background: var(--c-material);
-  border: 2px solid transparent;
-  cursor: pointer;
-  font-size: 11px;
+  padding: 4px 2px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: default;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
-  min-width: 44px;
-  height: 46px;
+  width: 60px;
+  user-select: none;
 }
-.ie-nav-btn svg { width: 24px; height: 24px; flex-shrink: 0; filter: grayscale(100%); }
+.ie-nav-btn svg { width: 32px; height: 32px; flex-shrink: 0; }
+.ie-nav-btn img { width: 32px; height: 32px; flex-shrink: 0; image-rendering: pixelated; }
 .ie-nav-btn span { font-size: 11px; line-height: 1; white-space: nowrap; }
-.ie-drop-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 2px;
-  background: var(--c-material);
-  border: 2px solid transparent;
-  cursor: pointer;
-  font-size: 7px;
-  color: #000;
-  align-self: center;
-  height: 20px;
-}
 .ie-nav-dim { opacity: 0.4; }
 .ie-toolbar-divider {
   width: 1px;
   background: var(--c-border-dark);
   margin: 4px 3px;
 }
-.ie-nav-btn:hover,
-.ie-drop-btn:hover {
-  border-top-color: var(--c-border-lightest);
-  border-left-color: var(--c-border-lightest);
-  border-bottom-color: var(--c-border-dark);
-  border-right-color: var(--c-border-dark);
+.ie-nav-btn:hover {
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-bottom: 1px solid #808080;
+  border-right: 1px solid #808080;
 }
-.ie-nav-btn:active,
-.ie-drop-btn:active {
-  border-top-color: var(--c-border-dark);
-  border-left-color: var(--c-border-dark);
-  border-bottom-color: var(--c-border-lightest);
-  border-right-color: var(--c-border-lightest);
+.ie-nav-btn:active {
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
+  padding: 5px 1px 3px 3px;
 }
 .ie-toolbar-sep {
   flex: 1;
@@ -187,18 +173,12 @@
   font-size: 11px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
   background: var(--c-material);
-  border: 2px solid;
-  border-top-color: var(--c-border-lightest);
-  border-left-color: var(--c-border-lightest);
-  border-bottom-color: var(--c-border-dark);
-  border-right-color: var(--c-border-dark);
+  border: none;
+  box-shadow: var(--shadow-btn);
   cursor: pointer;
 }
 .ie-go-btn:active {
-  border-top-color: var(--c-border-dark);
-  border-left-color: var(--c-border-dark);
-  border-bottom-color: var(--c-border-lightest);
-  border-right-color: var(--c-border-lightest);
+  box-shadow: var(--shadow-btn-active);
 }
 .ie-linksbar {
   display: flex;
@@ -221,16 +201,13 @@
   font-size: 11px;
   font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
   background: transparent;
-  border: 2px solid transparent;
-  padding: 1px 6px;
+  border: none;
+  padding: 3px 6px;
   cursor: pointer;
   white-space: nowrap;
 }
 .ie-link-btn:hover {
-  border-top-color: var(--c-border-lightest);
-  border-left-color: var(--c-border-lightest);
-  border-bottom-color: var(--c-border-dark);
-  border-right-color: var(--c-border-dark);
+  box-shadow: var(--shadow-btn);
   background: var(--c-material);
 }
 .ie-content {
@@ -238,6 +215,7 @@
   position: relative;
   overflow: hidden;
   min-height: 0;
+  cursor: url('../img/cursor-hand.png') 2 0, pointer;
 }
 #ie-frame {
   width: 100%;
@@ -289,11 +267,8 @@
   width: 24px;
   height: 24px;
   background: var(--c-material);
-  border: 2px solid;
-  border-top-color: var(--c-border-lightest);
-  border-left-color: var(--c-border-lightest);
-  border-bottom-color: var(--c-border-dark);
-  border-right-color: var(--c-border-dark);
+  border: none;
+  box-shadow: var(--shadow-btn);
   padding: 2px;
   cursor: pointer;
   display: flex;
@@ -304,17 +279,10 @@
 .paint-tool svg { width: 14px; height: 14px; }
 .paint-tool.active,
 .paint-tool:active {
-  border-top-color: var(--c-border-dark);
-  border-left-color: var(--c-border-dark);
-  border-bottom-color: var(--c-border-lightest);
-  border-right-color: var(--c-border-lightest);
+  box-shadow: var(--shadow-btn-active);
 }
 .paint-tool-options {
-  border: 2px solid;
-  border-top-color: var(--c-border-dark);
-  border-left-color: var(--c-border-dark);
-  border-bottom-color: var(--c-border-lightest);
-  border-right-color: var(--c-border-lightest);
+  box-shadow: var(--shadow-btn-active);
   padding: 4px 5px;
   display: flex;
   flex-direction: column;
