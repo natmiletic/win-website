@@ -1,4 +1,4 @@
-# 🖥️ Windows 95 Portfolio
+# Nat Miletic's Windows 95 Portfolio Website
 
 A nostalgic, interactive Windows 95 desktop simulation built as a personal portfolio — running entirely in the browser with no frameworks or dependencies.
 
@@ -11,15 +11,20 @@ Open windows, browse files, shut down the computer, and relive the golden era of
 ## Features
 
 - Draggable, resizable windows with authentic Win95 chrome
-- Functional Start Menu with shutdown dialog
+- Functional Start Menu with nested submenus and shutdown dialog
 - Welcome screen with rotating "Did you know..." tips
-- My Files explorer with a personal bio file
+- My Files explorer with folder navigation (Documents, Photos)
+- Nat Miletic Bio — desktop and file icon opening a styled notepad window
+- Internet Explorer window with retro filter and address bar
+- MS Paint with drawing tools, color palette, and canvas resize handles
 - System tray with live clock and speaker icon
-- Desktop icons including LinkedIn shortcut
-- Boot video support
+- Desktop icons including LinkedIn shortcut and Bio file
+- Boot video support with fade-in transition
 - MS-DOS mode, restart, and log off actions
-- Right-click context menu
-- Authentic pixel-art scrollbars and UI components
+- Right-click context menu on desktop
+- Custom pixel-art scrollbars with draggable thumbs and arrow buttons
+- Fixedsys and w95fa bitmap fonts for authentic retro typography
+- Organised codebase: split CSS (`css/`) and JS (`js/`) folders by layer
 
 ---
 
@@ -38,6 +43,8 @@ This project draws inspiration and references from several excellent open-source
 - **[95CSS by Yoshi Mannaert](https://github.com/yoshimannaert/95CSS)** — a fantastic CSS-only Win95 stylesheet. Referenced for scrollbar styling and dialog layout patterns.
 
 - **[w95fa Font](https://fontsarena.com/w95fa-by-alina-sava/)** — the authentic Windows 95 bitmap font used throughout the UI.
+
+- **[Fixedsys Excelsior by Darien Valentine](https://fixedsysexcelsior.com)** — the classic Windows bitmap monospace font used in notepad windows.
 
 - **[Win95/WinXP Icons Pack](https://github.com/awesome-windows95-icons)** — pixel-art icon assets used for the shutdown icon and system tray.
 
