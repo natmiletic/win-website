@@ -1070,8 +1070,8 @@ function mineFacePress() { mineSetFace('🙂'); }
 //  DISK DEFRAGMENTER
 // ════════════════════════════════
 function buildDefragWindow(container, type) {
-  const BW = 9, BH = 7, GAP = 1;
-  const CW = BW + GAP, CH = BH + GAP; // cell stride: 10w × 8h
+  const BW = 9, BH = 9, GAP = 1;
+  const CW = BW + GAP, CH = BH + GAP; // cell stride: 10w × 10h
   const ROWS_MAX = 150;               // total rows for ~15 min run
 
   const USED = 0, SYS = 1, FRAG = 2, FREE = 3, HEAD = 4, DEFRAG = 5;

@@ -505,9 +505,10 @@
   display: flex;
   flex: 1;
   overflow: hidden;
-  box-shadow: inset -1px -1px 0px #ffffff, inset 1px 1px 0px #808080,
-              inset -2px -2px 0px #c1c1c1, inset 2px 2px 0px #000000;
-  padding: 3px;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-bottom: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
   background: #000;
   min-height: 0;
 }
