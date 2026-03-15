@@ -20,8 +20,7 @@ function doLogoff() {
   document.body.innerHTML = `
     <div style="background:#008080;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;">
       <div style="background:#c0c0c0;box-shadow:inset -1px -1px 0 #0a0a0a,inset 1px 1px 0 #dfdfdf,inset -2px -2px 0 #848584,inset 2px 2px 0 #fefefe;width:320px;padding:3px;">
-        <div style="background:linear-gradient(to right,#000080,#1084d0);color:#fff;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;font-size:13px;font-weight:bold;padding:3px 5px;display:flex;align-items:center;gap:6px;height:22px;margin-bottom:2px;">
-          <img src="img/win95-logo.png" style="width:16px;height:16px;image-rendering:pixelated;flex-shrink:0;">
+        <div style="background:#060084;color:#fff;font-family:'w95fa','MS Sans Serif',Tahoma,sans-serif;font-size:13px;font-weight:bold;padding:3px 5px;display:flex;align-items:center;height:22px;margin-bottom:2px;">
           Log in to Windows
         </div>
         <div style="padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px;">
