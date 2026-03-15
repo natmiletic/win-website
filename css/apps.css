@@ -544,6 +544,7 @@
   overflow: hidden;
 }
 .defrag-bar-fill {
+  width: 0;
   height: 12px;
   background: repeating-linear-gradient(
     to right,

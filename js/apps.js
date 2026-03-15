@@ -1102,8 +1102,8 @@ function buildDefragWindow(container, type) {
           <div class="defrag-pct" id="${pctId}">0% Complete</div>
         </div>
         <div class="defrag-btns">
-          <button class="dialog-btn" style="width:90px"><u>S</u>top</button>
-          <button class="dialog-btn" style="width:90px"><u>P</u>ause</button>
+          <button class="dialog-btn" id="dfstop-${type}" style="width:90px"><u>S</u>top</button>
+          <button class="dialog-btn" id="dfpause-${type}" style="width:90px"><u>P</u>ause</button>
           <button class="dialog-btn" style="width:90px">Legend</button>
           <button class="dialog-btn" style="width:90px">Hide Details</button>
         </div>
@@ -1123,10 +1123,11 @@ function buildDefragWindow(container, type) {
   const vup    = container.querySelector('.notepad-scroll-up');
   const vdown  = container.querySelector('.notepad-scroll-down');
 
-  let COLS = 0, ROWS_INITIAL = 0;
-  let grid, currentRows, headPos, scrollOffset;
+  let COLS = 0;
+  let grid, headPos, scrollOffset;
   let lastTs = 0, nextInterval = 200;
   let progressPos = 0, progressTimer = null;
+  let paused = false, headBatch = [];
 
   function randInterval() { return 150 + Math.random() * 300; } // 150–450ms
 
@@ -1162,6 +1163,10 @@ function buildDefragWindow(container, type) {
     if (t === HEAD) {
       ctx.fillStyle = '#FF2020';
       ctx.fillRect(x, y, BW, BH);
+      ctx.fillStyle = '#000000';
+      for (let dy = 0; dy < BH; dy++)
+        for (let dx = dy & 1; dx < BW; dx += 2)
+          ctx.fillRect(x + dx, y + dy, 1, 1);
       return;
     }
     if (t === DEFRAG) {
@@ -1174,13 +1179,9 @@ function buildDefragWindow(container, type) {
           ctx.fillRect(x + dx, y + dy, 1, 1);
       return;
     }
-    // USED or SYS — bevelled block
-    const [fill, hi, sh] = t === SYS
-      ? ['#0000A8', '#2828C8', '#000060']
-      : ['#0ce3f4', '#80f4ff', '#088898'];
-    ctx.fillStyle = fill; ctx.fillRect(x + 1, y + 1, BW - 1, BH - 1);
-    ctx.fillStyle = hi;   ctx.fillRect(x, y, BW - 1, 1); ctx.fillRect(x, y + 1, 1, BH - 1);
-    ctx.fillStyle = sh;   ctx.fillRect(x + 1, y + BH - 1, BW - 1, 1); ctx.fillRect(x + BW - 1, y + 1, 1, BH - 1);
+    // USED or SYS — flat fill, black gap between cells acts as outline
+    ctx.fillStyle = t === SYS ? '#0000A8' : '#0ce3f4';
+    ctx.fillRect(x, y, BW, BH);
   }
 
   function drawRowRange(r0, r1) {
@@ -1191,7 +1192,7 @@ function buildDefragWindow(container, type) {
   // ── Scrollbar ──────────────────────────────
   function updateScrollbar() {
     const vpH = vp.clientHeight;
-    const canH = currentRows * CH;
+    const canH = ROWS_MAX * CH;
     const scrollable = Math.max(0, canH - vpH);
     scrollOffset = Math.max(0, Math.min(scrollOffset, scrollable));
     cv.style.top = -scrollOffset + 'px';
@@ -1208,7 +1209,7 @@ function buildDefragWindow(container, type) {
   }
 
   function autoScroll() {
-    const scrollable = Math.max(0, currentRows * CH - vp.clientHeight);
+    const scrollable = Math.max(0, ROWS_MAX * CH - vp.clientHeight);
     if (scrollable > 0 && scrollOffset >= scrollable - CH * 3) {
       scrollOffset = scrollable;
       updateScrollbar();
@@ -1224,7 +1225,7 @@ function buildDefragWindow(container, type) {
   });
   document.addEventListener('mousemove', e => {
     if (!vDrag) return;
-    const canH = currentRows * CH, vpH = vp.clientHeight;
+    const canH = ROWS_MAX * CH, vpH = vp.clientHeight;
     const scrollable = Math.max(0, canH - vpH);
     const trackH = vtrack.clientHeight;
     const thumbH = Math.max(20, (vpH / canH) * trackH);
@@ -1245,66 +1246,65 @@ function buildDefragWindow(container, type) {
   // ── Animation tick ──────────────────────────
   function tick(ts) {
     if (!document.getElementById(cvId)) return; // window closed
+    if (paused) { requestAnimationFrame(tick); return; }
     if (ts - lastTs < nextInterval) { requestAnimationFrame(tick); return; }
     lastTs = ts;
     nextInterval = randInterval();
 
-    // Reveal rows one-at-a-time as head progresses
-    const targetRows = Math.min(ROWS_MAX, ROWS_INITIAL + Math.floor(headPos / COLS));
-    if (targetRows > currentRows) {
-      drawRowRange(currentRows, targetRows);
-      currentRows = targetRows;
-      autoScroll();
-      updateScrollbar();
-    }
-
     if (headPos >= ROWS_MAX * COLS) {
       // Full pass complete — restart
       initGrid(COLS);
-      currentRows = ROWS_INITIAL;
       headPos = 0;
+      headBatch = [];
       scrollOffset = 0;
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, cv.width, cv.height);
-      drawRowRange(0, currentRows);
+      const rightMargin = cv.width - COLS * CW;
+      if (rightMargin > 0) { ctx.fillStyle = '#fff'; ctx.fillRect(COLS * CW, 0, rightMargin, cv.height); }
+      drawRowRange(0, ROWS_MAX);
       updateScrollbar();
       requestAnimationFrame(tick);
       return;
     }
 
-    // Clear previous head — block becomes defragmented (dark blue with dots)
-    if (headPos > 0 && grid[headPos - 1] === HEAD) {
-      grid[headPos - 1] = DEFRAG;
-      drawBlock(headPos - 1);
+    // Clear previous batch: all HEAD blocks → DEFRAG
+    for (const pos of headBatch) {
+      if (grid[pos] === HEAD) { grid[pos] = DEFRAG; drawBlock(pos); }
     }
-    // Paint current head — skip SYS and FREE blocks
-    if (grid[headPos] !== SYS && grid[headPos] !== FREE) {
-      grid[headPos] = HEAD;
-      drawBlock(headPos);
+    headBatch = [];
+
+    // Advance 1–6 blocks this tick, biased toward 1–2; all flash red together
+    const steps = 1 + Math.floor(Math.random() * Math.random() * 6);
+    for (let s = 0; s < steps && headPos < ROWS_MAX * COLS; s++) {
+      if (grid[headPos] !== SYS && grid[headPos] !== FREE && grid[headPos] !== FRAG) {
+        grid[headPos] = HEAD;
+        drawBlock(headPos);
+        headBatch.push(headPos);
+      }
+      headPos++;
     }
-    headPos++;
 
     requestAnimationFrame(tick);
   }
 
   // ── Init after layout renders ───────────────
   setTimeout(() => {
-    COLS         = Math.max(10, Math.floor(vp.clientWidth / CW));
-    ROWS_INITIAL = Math.max(5, Math.floor(vp.clientHeight / CH));
+    COLS = Math.max(10, Math.floor(vp.clientWidth / CW));
 
-    vp.style.background = '#000'; // switch from white holding screen to black
     cv.width  = vp.clientWidth; // exact viewport width — no black gap on right
     cv.height = ROWS_MAX * CH;  // pre-allocate full height
 
     initGrid(COLS);
-    currentRows  = ROWS_INITIAL;
     headPos      = 0;
+    headBatch    = [];
     progressPos  = 0;
     scrollOffset = 0;
 
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, cv.width, cv.height);
-    drawRowRange(0, currentRows);
+    const rightMargin = cv.width - COLS * CW;
+    if (rightMargin > 0) { ctx.fillStyle = '#fff'; ctx.fillRect(COLS * CW, 0, rightMargin, cv.height); }
+    drawRowRange(0, ROWS_MAX);
     updateScrollbar();
     updateProgress();
 
@@ -1317,6 +1317,20 @@ function buildDefragWindow(container, type) {
     }, 100);
 
     requestAnimationFrame(tick);
+
+    // Wire Stop button
+    const stopBtn = document.getElementById('dfstop-' + type);
+    if (stopBtn) stopBtn.addEventListener('click', () => {
+      clearInterval(progressTimer);
+      closeWindow('defrag');
+    });
+
+    // Wire Pause button
+    const pauseBtn = document.getElementById('dfpause-' + type);
+    if (pauseBtn) pauseBtn.addEventListener('click', () => {
+      paused = !paused;
+      pauseBtn.innerHTML = paused ? '<u>R</u>esume' : '<u>P</u>ause';
+    });
   }, 1000);
 }
 
