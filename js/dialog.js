@@ -20,24 +20,15 @@ function doLogoff() {
   const F = "'w95fa','MS Sans Serif',Tahoma,sans-serif";
   const btn = `min-width:72px;height:23px;background:#c0c0c0;box-shadow:inset -1px -1px 0 #0a0a0a,inset 1px 1px 0 #fefefe,inset -2px -2px 0 #848584,inset 2px 2px 0 #dfdfdf;border:none;cursor:pointer;font-family:${F};font-size:13px;color:#000;`;
   const field = `flex:1;height:20px;border:none;box-shadow:inset -1px -1px 0 #dfdfdf,inset 1px 1px 0 #848584,inset -2px -2px 0 #fefefe,inset 2px 2px 0 #0a0a0a;padding:0 3px;font-family:${F};font-size:13px;background:#fff;outline:none;`;
-  const winBtn = `width:16px;height:14px;background:#c0c0c0;box-shadow:inset -1px -1px 0 #0a0a0a,inset 1px 1px 0 #fefefe,inset -2px -2px 0 #848584,inset 2px 2px 0 #dfdfdf;border:none;cursor:pointer;font-family:${F};font-size:10px;color:#000;padding:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;`;
   document.body.innerHTML = `
     <div style="background:#008080;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;">
-      <div style="background:#c0c0c0;box-shadow:inset -1px -1px 0 #0a0a0a,inset 1px 1px 0 #dfdfdf,inset -2px -2px 0 #848584,inset 2px 2px 0 #fefefe;width:400px;padding:3px;">
-        <div style="background:#060084;color:#fff;font-family:${F};font-size:13px;font-weight:bold;padding:2px 3px;display:flex;align-items:center;gap:4px;height:22px;margin-bottom:0;">
-          <span style="flex:1;">Welcome to Windows</span>
-          <button style="${winBtn}">?</button>
-          <button style="${winBtn}">✕</button>
+      <div style="background:#c0c0c0;box-shadow:inset -1px -1px 0 #0a0a0a,inset 1px 1px 0 #dfdfdf,inset -2px -2px 0 #848584,inset 2px 2px 0 #fefefe;width:440px;padding:3px;">
+        <div style="background:#060084;color:#fff;font-family:${F};font-size:13px;font-weight:bold;padding:2px 5px;display:flex;align-items:center;height:22px;margin-bottom:0;">
+          Welcome to Windows
         </div>
         <div style="display:flex;gap:0;padding:12px 10px 8px;">
           <div style="flex-shrink:0;width:52px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="13" cy="13" r="9" stroke="#c8a000" stroke-width="3" fill="none"/>
-              <circle cx="13" cy="13" r="4" fill="#f0c000"/>
-              <rect x="20" y="16" width="14" height="3" rx="1" fill="#c8a000"/>
-              <rect x="29" y="19" width="3" height="4" rx="1" fill="#c8a000"/>
-              <rect x="24" y="19" width="3" height="3" rx="1" fill="#c8a000"/>
-            </svg>
+            <img src="img/login-icon.png" style="width:40px;height:36px;image-rendering:pixelated;">
           </div>
           <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
             <p style="margin:0 0 8px;font-family:${F};font-size:13px;">Type a user name and password to log on to Windows.</p>
