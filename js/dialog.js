@@ -26,7 +26,7 @@ function doLogoff() {
         <div style="background:#060084;color:#fff;font-family:${F};font-size:13px;font-weight:bold;padding:2px 5px;display:flex;align-items:center;height:22px;margin-bottom:0;">
           Welcome to Windows
         </div>
-        <div style="display:flex;gap:0;padding:12px 10px 8px;">
+        <div style="display:flex;gap:0;padding:12px 10px 18px;">
           <div style="flex-shrink:0;width:52px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
             <img src="img/login-icon.png" style="width:40px;height:36px;image-rendering:pixelated;">
           </div>
