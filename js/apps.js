@@ -1132,6 +1132,7 @@ function buildDefragWindow(container, type) {
   let COLS = 0, ROWS_INITIAL = 0;
   let grid, currentRows, headPos, scrollOffset;
   let lastTs = 0, nextInterval = 200;
+  let progressPos = 0, progressTimer = null;
 
   function randInterval() { return 150 + Math.random() * 300; } // 150–450ms
 
@@ -1212,7 +1213,7 @@ function buildDefragWindow(container, type) {
 
   // ── Progress bar (whole blocks only) ───────
   function updateProgress() {
-    const pct = Math.min(100, Math.floor(headPos / (ROWS_MAX * COLS) * 100));
+    const pct = Math.min(100, Math.floor(progressPos / (ROWS_MAX * COLS) * 100));
     const trackW = fillEl.parentElement.clientWidth - 4; // 2px padding each side
     const maxBlks = Math.floor(trackW / 10);
     fillEl.style.width = (Math.floor(pct / 100 * maxBlks) * 10) + 'px';
@@ -1245,7 +1246,6 @@ function buildDefragWindow(container, type) {
       ctx.fillRect(0, 0, cv.width, cv.height);
       drawRowRange(0, currentRows);
       updateScrollbar();
-      updateProgress();
       requestAnimationFrame(tick);
       return;
     }
@@ -1262,7 +1262,6 @@ function buildDefragWindow(container, type) {
     }
     headPos++;
 
-    updateProgress();
     requestAnimationFrame(tick);
   }
 
@@ -1271,12 +1270,13 @@ function buildDefragWindow(container, type) {
     COLS         = Math.max(10, Math.floor(vp.clientWidth / CW));
     ROWS_INITIAL = Math.max(5, Math.floor(vp.clientHeight / CH));
 
-    cv.width  = COLS * CW;
-    cv.height = ROWS_MAX * CH; // pre-allocate full height
+    cv.width  = vp.clientWidth; // exact viewport width — no black gap on right
+    cv.height = ROWS_MAX * CH;  // pre-allocate full height
 
     initGrid(COLS);
     currentRows  = ROWS_INITIAL;
     headPos      = 0;
+    progressPos  = 0;
     scrollOffset = 0;
 
     ctx.fillStyle = '#000';
@@ -1284,6 +1284,14 @@ function buildDefragWindow(container, type) {
     drawRowRange(0, currentRows);
     updateScrollbar();
     updateProgress();
+
+    // Progress bar runs on its own fixed 100ms timer, independent of animation speed
+    progressTimer = setInterval(() => {
+      if (!document.getElementById(cvId)) { clearInterval(progressTimer); return; }
+      progressPos++;
+      if (progressPos >= ROWS_MAX * COLS) progressPos = 0;
+      updateProgress();
+    }, 100);
 
     requestAnimationFrame(tick);
   }, 50);
