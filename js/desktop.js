@@ -9,7 +9,71 @@ function toggleStartMenu(e) {
 function closeStartMenu() {
   document.getElementById('start-menu').classList.remove('visible');
   document.getElementById('start-btn').classList.remove('pressed');
+  mobileMenuReset();
 }
+
+// ════════════════════════════════
+//  MOBILE DRILL-DOWN MENU
+// ════════════════════════════════
+(function () {
+  const isMobile = () => window.matchMedia('(max-width:768px)').matches;
+  let navStack = [];
+
+  function getPanel() { return document.getElementById('start-submenu-panel'); }
+  function getItems() { return document.getElementById('ssm-items'); }
+
+  // Wire up has-submenu taps inside the panel (called after each panel update)
+  function wirePanel() {
+    getItems().querySelectorAll('.has-submenu').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        const sub = item.querySelector(':scope > .start-submenu');
+        if (!sub) return;
+        e.stopPropagation();
+        navStack.push(getItems().innerHTML);
+        getItems().innerHTML = sub.innerHTML;
+        wirePanel();
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Tap on a top-level has-submenu item
+    document.getElementById('start-menu').addEventListener('click', function (e) {
+      if (!isMobile()) return;
+      const panel = getPanel();
+      if (panel.classList.contains('visible')) return; // panel already handling it
+      const item = e.target.closest('.start-menu-item.has-submenu');
+      if (!item) return;
+      const sub = item.querySelector(':scope > .start-submenu');
+      if (!sub) return;
+      e.stopPropagation();
+      navStack = [];
+      getItems().innerHTML = sub.innerHTML;
+      wirePanel();
+      panel.classList.add('visible');
+    });
+
+    // Back button
+    document.getElementById('ssm-back').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (navStack.length > 0) {
+        getItems().innerHTML = navStack.pop();
+        wirePanel();
+      } else {
+        mobileMenuReset();
+      }
+    });
+  });
+
+  // Exposed so closeStartMenu can call it
+  window.mobileMenuReset = function () {
+    const panel = getPanel();
+    if (panel) panel.classList.remove('visible');
+    const items = getItems();
+    if (items) items.innerHTML = '';
+    navStack = [];
+  };
+})();
 
 // ════════════════════════════════
 //  CONTEXT MENU

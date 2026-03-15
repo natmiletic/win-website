@@ -244,51 +244,38 @@
 .start-submenu-item .item-text { flex: 1; }
 
 /* ════════════════════════════════
-   MOBILE: always-expanded submenus
+   MOBILE DRILL-DOWN PANEL
+   Overlays the start menu when a submenu is tapped on mobile.
+   Controlled entirely via JS (classList.add/remove 'visible').
    ════════════════════════════════ */
-@media (max-width: 768px) {
-  #start-menu {
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-    width: 240px;
-  }
-
-  /* Parent items that have submenus must wrap so the submenu
-     drops onto its own row (they are display:flex, so without
-     flex-wrap the submenu appears inline to the right) */
-  .start-menu-item.has-submenu,
-  .start-submenu-item.has-submenu {
-    flex-wrap: wrap;
-  }
-
-  /* All submenus always visible, full-width on their own row */
-  .start-submenu {
-    display: block !important;
-    position: static;
-    left: auto;
-    top: auto;
-    box-shadow: none;
-    background: transparent;
-    border: none;
-    min-width: 0;
-    padding: 0;
-    flex-basis: 100%; /* break onto new row inside the flex parent */
-  }
-
-  /* Indent level 1 (Programs > items) */
-  .start-submenu > .start-submenu-item,
-  .start-submenu > .has-submenu {
-    padding-left: 20px;
-  }
-
-  /* Indent level 2 (Programs > Accessories > items) */
-  .start-submenu .start-submenu > .start-submenu-item,
-  .start-submenu .start-submenu > .has-submenu {
-    padding-left: 36px;
-  }
-
-  /* Indent level 3 (Programs > Accessories > Games > items) */
-  .start-submenu .start-submenu .start-submenu > .start-submenu-item {
-    padding-left: 52px;
-  }
+#start-submenu-panel {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: var(--c-gray-200);
+  flex-direction: column;
+}
+#start-submenu-panel.visible {
+  display: flex;
+}
+#ssm-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #000080;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  font-family: "w95fa", 'MS Sans Serif', Tahoma, sans-serif;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-align: left;
+  width: 100%;
+}
+#ssm-items {
+  flex: 1;
+  overflow-y: auto;
 }
