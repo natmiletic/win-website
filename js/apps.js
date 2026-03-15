@@ -1288,7 +1288,9 @@ function buildDefragWindow(container, type) {
   }
 
   // ── Init after layout renders ───────────────
-  setTimeout(() => {
+  // Double rAF: first frame lets the browser lay out the window,
+  // second frame runs immediately after — eliminates the white flash.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
     COLS         = Math.max(10, Math.floor(vp.clientWidth / CW));
     ROWS_INITIAL = Math.max(5, Math.floor(vp.clientHeight / CH));
 
@@ -1316,7 +1318,7 @@ function buildDefragWindow(container, type) {
     }, 100);
 
     requestAnimationFrame(tick);
-  }, 50);
+  }));
 }
 
 // ════════════════════════════════
