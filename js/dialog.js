@@ -123,7 +123,7 @@ function doShutdownAction() {
   } else {
     document.body.innerHTML = `
       <div style="background:#000;width:100vw;height:100vh;overflow:hidden;">
-        <img src="img/shutdown-screen.jpg" style="width:100%;height:100%;object-fit:cover;">
+        <img src="img/shutdown-screen.jpg" style="width:100%;height:100%;object-fit:contain;">
       </div>`;
   }
 }
